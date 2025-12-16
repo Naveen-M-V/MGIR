@@ -23,7 +23,11 @@ export const useWishlist = () => {
     try {
       setLoading(true);
       const response = await userAPI.getWishlist();
+      console.log('useWishlist: Raw API response:', response);
       if (response.data.success) {
+        console.log('useWishlist: Setting wishlist data:', response.data.data.wishlist);
+        console.log('useWishlist: Wishlist length:', response.data.data.wishlist.length);
+        console.log('useWishlist: Wishlist items:', response.data.data.wishlist);
         setWishlist(response.data.data.wishlist);
       }
     } catch (error) {

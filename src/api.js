@@ -1,6 +1,11 @@
 import axios from 'axios';
 
-const BASE_URL = 'http://localhost:5000/api';
+// Use Vite environment variables (import.meta.env instead of process.env)
+const BASE_URL = import.meta.env.VITE_API_URL 
+  ? import.meta.env.VITE_API_URL.replace(/\/$/, '')
+  : 'http://localhost:5000/api';
+
+console.log('API Base URL:', BASE_URL); // For debugging
 
 // Configure axios defaults
 axios.defaults.baseURL = BASE_URL;
@@ -27,7 +32,9 @@ export const authAPI = {
   logout: () => axios.post('/auth/logout'),
   getProfile: () => axios.get('/auth/me'),
   updateProfile: (userData) => axios.put('/auth/update-profile', userData),
-  changePassword: (passwords) => axios.put('/auth/change-password', passwords)
+  changePassword: (passwords) => axios.put('/auth/change-password', passwords),
+  verifyOTP: (data) => axios.post('/auth/verify-otp', data),
+  resendOTP: (data) => axios.post('/auth/resend-otp', data)
 };
 
 // User APIs

@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import axios from 'axios';
+import { authAPI } from '../api';
 
 const AuthContext = createContext();
 
@@ -28,9 +28,7 @@ export const AuthProvider = ({ children }) => {
 
       if (token && userData) {
         // Verify token is still valid
-        const response = await axios.get('http://localhost:5000/api/auth/me', {
-          headers: { Authorization: `Bearer ${token}` }
-        });
+        const response = await authAPI.getProfile();
 
         if (response.data.success) {
           setUser(response.data.data.user);
@@ -58,7 +56,7 @@ export const AuthProvider = ({ children }) => {
   const logout = async () => {
     try {
       // Call backend logout endpoint
-      await axios.post('http://localhost:5000/api/auth/logout');
+      await authAPI.logout();
     } catch (error) {
       console.error('Logout error:', error);
     } finally {

@@ -11,8 +11,8 @@ export const carServicesTranslations = {
     
     // Main Hero Section
     mainTitle: "Seamless Transfers, Your Private Chauffeur Awaits.",
-    mainSubtitle: "Start your Roman holiday the right way with stress-free, stylish, and reliable airport transfers tailored to your preferences. Whether you're traveling solo, as a couple, or with family and friends, our airport transfer services are designed to provide a hassle-free start and end to your Roman journey.",
-    mainDescription: "Enjoy punctual pickups, professional drivers, and the peace of mind that comes with having your transportation arranged in advance. Book your airport transfer now and step into the Eternal City with ease and style!",
+    mainSubtitle: "We provide a single, definitive platform for all your transportation needs, eliminating the complexity of managing multiple services. From critical airport arrivals to exhilarating self-drive adventures and dedicated private travel, our solutions are designed to deliver uncompromised style, safety, and convenience across the entire spectrum of high-end mobility.",
+    mainDescription: "No matter the destination, duration, or vehicle class—from reliable small executive models to the most prestigious supercars we offer a seamless, all in one experience tailored to your exact specifications.",
 
     // Choose Your Ride Section
     chooseYourRide: "Choose Your Ride",
@@ -62,7 +62,7 @@ export const carServicesTranslations = {
     phoneNumber: "Phone Number",
     phoneNumberExample: "+39 123 456 7890",
     completeAllRequiredFields: "Complete all required fields",
-    payWithPayPal: "Pay with PayPal",
+    payWithPayPal: "Proceed to payment",
     securePaymentPoweredByPayPal: "Secure payment powered by PayPal",
     upTo7People: "Up to 7 people",
     from150OneWay: "From €150 (one way)",
@@ -156,9 +156,47 @@ export const carServicesTranslations = {
     
     // Navigation
     home: "Home",
+
+    close: "Close",
+
+    // Common buttons
+    back: "Back",
+    next: "Next",
+    selected: "selected",
+
+    // Booking flow additions
+    bookYourRide: "Book Your Ride",
+    flightDetails: "Flight Details",
+    selectDate: "Select a date",
+    selectTime: "Select a time",
+    selectOption: "Select Option",
+    mobileNumber: "Mobile Number",
+    specialInstructionsOptional: "Special Instructions (optional)",
+
+    // PayPal / payment errors
+    paypalRedirectError: "Unable to redirect to PayPal. Please try again.",
+    orderCreateFailed: "Failed to create order. Please try again.",
+    paymentFailed: "Payment failed. Please try again.",
+
+    // Private chauffeur / date picker labels
+    serviceDates: "Service Dates",
+    clickToSelectDates: "Click to select dates",
+    selectedDates: "Selected Dates:",
+    daysSelected: "days selected",
+
+    // Car rental summary labels
+    dailyRate: "Daily Rate:",
+    rentalDaysLabel: "Rental Days:",
+    totalPriceLabel: "Total Price:",
+    fullNameRequired: "Full name is required",
+    ageMustBeBetween: "Age must be between 18 and 120",
+    fromDateRequired: "From date is required",
+    toDateRequired: "To date is required",
+    toDateMustBeAfterFromDate: "To date must be after from date",
     
     // Additional translations for missing text
     iAcceptThe: "I accept the",
+    termsAndConditions: "Terms and Conditions",
     personalCurator: "Personal Curator",
     
     // Additional Airport Transfer Modal translations
@@ -193,7 +231,7 @@ export const carServicesTranslations = {
     specialRequestsOptional: "Special Requests (Optional)",
     anySpecialRequirementsOrDestinations: "Any special requirements or destinations you'd like to visit...",
     completeAllRequiredFields: "Complete all required fields",
-    payWithPayPal: "Pay with PayPal",
+    payWithPayPal: "Proceed to payment",
     securePaymentPoweredByPayPal: "Secure payment powered by PayPal"
   },
 
@@ -203,8 +241,8 @@ export const carServicesTranslations = {
     
     // Main Hero Section
     mainTitle: "Traslados sin interrupciones, su chofer privado le espera.",
-    mainSubtitle: "Empieza tus vacaciones en Roma de la mejor manera con traslados al aeropuerto sin estrés, con estilo y de confianza, adaptados a tus preferencias. Tanto si viajas solo, en pareja o con familiares y amigos, nuestros servicios de traslado al aeropuerto están diseñados para que tu viaje a Roma comience y termine sin complicaciones.",
-    mainDescription: "Disfruta de recogidas puntuales, conductores profesionales y la tranquilidad de organizar tu transporte con antelación. ¡Reserva tu traslado al aeropuerto ahora y entra en la Ciudad Eterna con comodidad y estilo!",
+    mainSubtitle: "Ofrecemos una plataforma única y definitiva para todas sus necesidades de transporte, eliminando la complejidad de gestionar múltiples servicios. Desde llegadas urgentes al aeropuerto hasta emocionantes aventuras en coche y viajes privados, nuestras soluciones están diseñadas para ofrecer estilo, seguridad y comodidad inigualables en todo el espectro de la movilidad de alta gama.",
+    mainDescription: "Sin importar el destino, la duración o la categoría del vehículo, desde los confiables modelos ejecutivos pequeños hasta los superdeportivos más prestigiosos, ofrecemos una experiencia integral y sin complicaciones, adaptada a sus necesidades.",
 
     // Choose Your Ride Section
     chooseYourRide: "Elige tu viaje",
@@ -254,7 +292,7 @@ export const carServicesTranslations = {
     phoneNumber: "Número de teléfono",
     phoneNumberExample: "+39 123 456 7890",
     completeAllRequiredFields: "Complete todos los campos solicitados",
-    payWithPayPal: "Pagar con PayPal",
+    payWithPayPal: "Proceder al pago",
     securePaymentPoweredByPayPal: "Pago seguro con PayPal",
     upTo7People: "Hasta 7 personas",
     from150OneWay: "Desde 150 € (solo ida)",
@@ -348,9 +386,47 @@ export const carServicesTranslations = {
     
     // Navigation
     home: "Inicio",
+
+    close: "Cerrar",
+
+    // Common buttons
+    back: "Atrás",
+    next: "Siguiente",
+    selected: "seleccionado",
+
+    // Booking flow additions
+    bookYourRide: "Reserva tu viaje",
+    flightDetails: "Detalles del vuelo",
+    selectDate: "Seleccionar una fecha",
+    selectTime: "Seleccionar una hora",
+    selectOption: "Seleccionar opción",
+    mobileNumber: "Número de móvil",
+    specialInstructionsOptional: "Instrucciones especiales (opcional)",
+
+    // PayPal / payment errors
+    paypalRedirectError: "No se pudo redirigir a PayPal. Por favor, inténtelo de nuevo.",
+    orderCreateFailed: "No se pudo crear el pedido. Por favor, inténtelo de nuevo.",
+    paymentFailed: "El pago falló. Por favor, inténtelo de nuevo.",
+
+    // Private chauffeur / date picker labels
+    serviceDates: "Fechas de servicio",
+    clickToSelectDates: "Haga clic para seleccionar fechas",
+    selectedDates: "Fechas seleccionadas:",
+    daysSelected: "días seleccionados",
+
+    // Car rental summary labels
+    dailyRate: "Tarifa diaria:",
+    rentalDaysLabel: "Días de alquiler:",
+    totalPriceLabel: "Precio total:",
+    fullNameRequired: "El nombre completo es obligatorio",
+    ageMustBeBetween: "La edad debe estar entre 18 y 120",
+    fromDateRequired: "La fecha de inicio es obligatoria",
+    toDateRequired: "La fecha de fin es obligatoria",
+    toDateMustBeAfterFromDate: "La fecha de fin debe ser posterior a la fecha de inicio",
     
     // Additional translations for missing text
     iAcceptThe: "Acepto los",
+    termsAndConditions: "Términos y Condiciones",
     personalCurator: "Curador Personal",
     
     // Additional Airport Transfer Modal translations
@@ -385,7 +461,7 @@ export const carServicesTranslations = {
     specialRequestsOptional: "Solicitudes especiales (opcional)",
     anySpecialRequirementsOrDestinations: "¿Tiene algún requisito especial o destino que desea visitar?",
     completeAllRequiredFields: "Complete todos los campos solicitados",
-    payWithPayPal: "Pagar con PayPal",
+    payWithPayPal: "Proceder al pago",
     securePaymentPoweredByPayPal: "Pago seguro con PayPal"
   },
 
@@ -395,8 +471,8 @@ export const carServicesTranslations = {
     
     // Main Hero Section
     mainTitle: "Удобные трансферы. Ваш личный шофер ждет вас.",
-    mainSubtitle: "Начните свой отпуск в Риме правильно: комфортный, стильный и надежный трансфер из аэропорта, подобранный с учетом ваших предпочтений. Путешествуете ли вы в одиночку или с семьей и друзьями, наши услуги трансфера из аэропорта обеспечат вам безаботное начало и завершение вашего путешествия по Риму.",
-    mainDescription: "Насладитесь пунктуальностью трансфера, профессиональными водителями и спокойствием, которое дает заранее организованный трансфер. Забронируйте трансфер из аэропорта прямо сейчас и откройте для себя Вечный город с комфортом и стилем!",
+    mainSubtitle: "Мы предлагаем единую платформу и окончательное решение для всех необходимых транспортных услуг, исключающее комплексные услуги по предоставлению нескольких услуг. После того, как в аэропорту возникли эмоциональные приключения в дороге и частных поездках, наши решения были разработаны для обеспечения стиля, безопасности и удобства на всем протяжении обзора движения в Альта-Гаме.",
+    mainDescription: "Не важно, насколько важна судьба, длительность или категория транспортных средств, из-за того, что модели, используемые в личных сообщениях, могут оказаться очень престижными, мы получаем полный опыт и сложности, адаптированные к нашим потребностям.",
 
     // Choose Your Ride Section
     chooseYourRide: "Выберите свою поездку",
@@ -446,7 +522,7 @@ export const carServicesTranslations = {
     phoneNumber: "Номер телефона",
     phoneNumberExample: "+39 123 456 7890",
     completeAllRequiredFields: "Заполните все требуемые поля",
-    payWithPayPal: "Оплатить через PayPal",
+    payWithPayPal: "Перейти к оплате",
     securePaymentPoweredByPayPal: "Безопасная оплата через PayPal",
     upTo7People: "До 7 человек - 150 евро (в одну сторону)",
     from150OneWay: "От 150 евро (в одну сторону)",
@@ -540,9 +616,47 @@ export const carServicesTranslations = {
     
     // Navigation
     home: "Главная",
+
+    close: "Закрыть",
+
+    // Common buttons
+    back: "Назад",
+    next: "Далее",
+    selected: "выбрано",
+
+    // Booking flow additions
+    bookYourRide: "Заказать поездку",
+    flightDetails: "Детали рейса",
+    selectDate: "Выберите дату",
+    selectTime: "Выберите время",
+    selectOption: "Выбрать вариант",
+    mobileNumber: "Номер мобильного",
+    specialInstructionsOptional: "Особые инструкции (необязательно)",
+
+    // PayPal / payment errors
+    paypalRedirectError: "Не удалось перейти на PayPal. Пожалуйста, попробуйте еще раз.",
+    orderCreateFailed: "Не удалось создать заказ. Пожалуйста, попробуйте еще раз.",
+    paymentFailed: "Платеж не прошел. Пожалуйста, попробуйте еще раз.",
+
+    // Private chauffeur / date picker labels
+    serviceDates: "Даты обслуживания",
+    clickToSelectDates: "Нажмите, чтобы выбрать даты",
+    selectedDates: "Выбранные даты:",
+    daysSelected: "выбрано дней",
+
+    // Car rental summary labels
+    dailyRate: "Дневной тариф:",
+    rentalDaysLabel: "Дни аренды:",
+    totalPriceLabel: "Итоговая цена:",
+    fullNameRequired: "Требуется полное имя",
+    ageMustBeBetween: "Возраст должен быть от 18 до 120",
+    fromDateRequired: "Требуется дата начала",
+    toDateRequired: "Требуется дата окончания",
+    toDateMustBeAfterFromDate: "Дата окончания должна быть позже даты начала",
     
     // Additional translations for missing text
     iAcceptThe: "Я принимаю",
+    termsAndConditions: "Условия использования",
     personalCurator: "Персональный Куратор",
     
     // Additional Airport Transfer Modal translations
@@ -577,7 +691,7 @@ export const carServicesTranslations = {
     specialRequestsOptional: "Особые пожелания (необязательно)",
     anySpecialRequirementsOrDestinations: "Любые особые пожелания или места, которые вы хотели бы посетить...",
     completeAllRequiredFields: "Заполните все требуемые поля",
-    payWithPayPal: "Оплатить через PayPal",
+    payWithPayPal: "Перейти к оплате",
     securePaymentPoweredByPayPal: "Безопасная оплата через PayPal"
   }
 };

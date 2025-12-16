@@ -104,24 +104,70 @@ function ServiceModal({ service, onClose }) {
   const [showMoreDetails, setShowMoreDetails] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
   const [selectedLanguage, setSelectedLanguage] = useState('');
+  const [selectedPackage, setSelectedPackage] = useState('express');
+  const [selectedEBykeOption, setSelectedEBykeOption] = useState(null);
+  const [formData, setFormData] = useState({
+    persons: '',
+    name: '',
+    email: '',
+    date: '',
+    time: '',
+    package: '',
+    startTime: ''
+  });
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData(prev => ({
+      ...prev,
+      [name]: value
+    }));
+  };
+
+  const isFormValid = () => {
+    // E-Bike tours require all fields
+    if (selectedEBykeOption) {
+      return formData.persons && formData.name && formData.email && formData.date;
+    }
+    
+    // Private Colosseum Tour requires persons, package, startTime, name, email, date
+    if (service.titleKey === "privateColosseum") {
+      return formData.persons && selectedPackage && formData.startTime && formData.name && formData.email && formData.date;
+    }
+    
+    // Colosseum and Foro Romano Tour requires persons, time, name, email, date
+    if (service.title === "Colosseum and Foro Romano Tour") {
+      return formData.persons && formData.time && formData.name && formData.email && formData.date;
+    }
+    
+    // Rome Vespa Tour requires persons, name, email, date
+    if (service.title === "Rome Vespa Tour") {
+      return formData.persons && formData.name && formData.email && formData.date;
+    }
+    
+    // Default case for other tours
+    return formData.persons && formData.name && formData.email && formData.date;
+  };
 
   // wishlist helpers from hook
   const { addToWishlist, isInWishlist } = useWishlist();
 
   const handlePayPalPayment = async (bookingData) => {
     try {
-      const price = parseFloat(service.price);
+      const price = bookingData && bookingData.price ? parseFloat(bookingData.price) : parseFloat(service.price) || 0;
       const orderResponse = await paymentService.createOrder({
         amount: price,
         currency: 'EUR',
-        description: service.title,
+        description: bookingData?.service || service.title,
         serviceType: 'tour',
-        customerName: 'Guest',
-        customerEmail: 'guest@example.com',
+        customerName: bookingData?.name || 'Guest',
+        customerEmail: bookingData?.email || 'guest@example.com',
         customerPhone: '0000000000',
         bookingDetails: {
           place: service.place,
-          languages: service.languages
+          languages: service.languages,
+          date: bookingData?.date,
+          persons: bookingData?.persons
         }
       });
 
@@ -243,10 +289,45 @@ function ServiceModal({ service, onClose }) {
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-black/30 via-transparent to-transparent" />
               </div>
-              <p className="text-white/90 mb-4 text-sm leading-relaxed">{service.descKey ? t[service.descKey] : service.description}</p>
+              <div className="text-white/90 mb-4 text-sm leading-relaxed">
+                {service.descKey ? (
+                  <>
+                    {showMoreDetails ? (
+                      t[service.descKey].split('\n').map((line, index) => {
+                        if (line.startsWith('*')) {
+                          return <div key={index} className="ml-4">• {line.substring(1).trim()}</div>;
+                        } else if (line.trim() === '') {
+                          return <br key={index} />;
+                        } else {
+                          return <div key={index}>{line}</div>;
+                        }
+                      })
+                    ) : (
+                      t[service.descKey].split('\n').slice(0, 3).map((line, index) => {
+                        if (line.startsWith('*')) {
+                          return <div key={index} className="ml-4">• {line.substring(1).trim()}</div>;
+                        } else if (line.trim() === '') {
+                          return <br key={index} />;
+                        } else {
+                          return <div key={index}>{line}</div>;
+                        }
+                      })
+                    )}
+                    <button
+                      onClick={() => setShowMoreDetails(!showMoreDetails)}
+                      className="text-blue-400 hover:text-blue-300 text-sm font-medium mt-2 transition-colors duration-200"
+                    >
+                      {showMoreDetails ? t.hideDetails : t.viewMoreDetails}
+                    </button>
+                  </>
+                ) : service.description}
+              </div>
               <div className="mb-5 text-center">
                 <span className="text-lg font-semibold bg-gradient-to-r from-blue-400 to-purple-500 bg-clip-text text-transparent">
-                  {service.price}€/pp
+                  {service.titleKey === "privateColosseum"
+                    ? (selectedPackage === 'express' ? '200' : '270') + '€/pp'
+                    : (service.titleKey === 'privateEBikeTour' ? t.startingFrom : service.price + '€/pp')
+                  }
                 </span>
               </div>
               {service.languages && (
@@ -259,64 +340,39 @@ function ServiceModal({ service, onClose }) {
                   />
                 </div>
               )}
+
+              {/* Golf Cart Disclaimer */}
+              {service.titleKey === "romeGolfCart" && (
+                <div className="mb-5 p-4 bg-amber-500/10 border border-amber-500/30 rounded-xl">
+                  <div className="text-amber-200 text-sm font-medium text-center whitespace-pre-line">
+                    {t.golfCartDisclaimer}
+                  </div>
+                </div>
+              )}
             </div>
 
             {/* Form */}
             <form className="flex flex-col gap-3" onSubmit={(e) => {
               e.preventDefault();
-              if (!acceptTerms) {
-                alert('❌ Please accept the Terms and Conditions to proceed');
-                return;
-              }
-              if (availableLanguages.length > 0 && !selectedLanguage) {
-                alert('❌ Please select a language preference to proceed');
-                return;
-              }
               const formData = new FormData(e.target);
               const bookingData = {
-                name: formData.get('name'),
-                email: formData.get('email'),
-                date: formData.get('date'),
                 persons: formData.get('persons'),
                 time: formData.get('time'),
-                language: formData.get('language'),
+                package: formData.get('package'),
                 service: service.title,
-                price: service.price
+                price: service.titleKey === "privateColosseum" 
+                  ? (selectedPackage === 'express' ? '200' : '270')
+                  : service.price,
+                name: formData.get('name'),
+                email: formData.get('email'),
+                date: formData.get('date')
               };
               handlePayPalPayment(bookingData);
             }}>
-              <input
-                name="name"
-                type="text"
-                className="border border-white/20 rounded-xl py-3 px-4 bg-white/10 text-white placeholder-white/50 focus:border-blue-400 focus:ring-1 focus:ring-blue-400/50 focus:outline-none text-sm transition-all duration-300 backdrop-blur-sm"
-                placeholder={t.yourName}
-                required
-              />
-              <input
-                name="email"
-                type="email"
-                className="border border-white/20 rounded-xl py-3 px-4 bg-white/10 text-white placeholder-white/50 focus:border-purple-400 focus:ring-1 focus:ring-purple-400/50 focus:outline-none text-sm transition-all duration-300 backdrop-blur-sm"
-                placeholder={t.emailAddress}
-                required
-              />
-              <div className="flex gap-3">
-                <div className="flex-1">
-                  <ModernDatePicker
-                    selected={null}
-                    onSelect={(date) => {
-                      const input = document.querySelector('input[name="date"]');
-                      if (input) input.value = date.toISOString().slice(0, 10);
-                    }}
-                    placeholder={t.selectDate}
-                  />
-                </div>
-                <input
-                  name="date"
-                  type="hidden"
-                  required
-                />
+              
+                <div className="flex gap-3">
                 <div className="relative flex-1">
-                  {service.title === "Rome Vespa Tour" ? (
+                  {service.title === "Rome Vespa Tour" || service.titleKey === "romeVespaTour" ? (
                     <input
                       name="persons"
                       type="integer"
@@ -327,20 +383,134 @@ function ServiceModal({ service, onClose }) {
                       required
                     />
                   ) : (
-                    <input
-                      name="persons"
-                      type="integer "
-                      defaultValue="1"
-                      className="w-full border border-white/20 rounded-xl py-3 px-4 bg-white/10 text-white placeholder-white/50 focus:border-amber-400 focus:ring-1 focus:ring-amber-400/50 focus:outline-none text-sm transition-all duration-300 backdrop-blur-sm"
-                      placeholder={t.personCount}
-                      required
-                      onInput={(e) => {
-                        let value = parseInt(e.target.value) || 1;
-                        const maxValue = service.title === "Colosseum and Foro Romano Tour" ? 8 : 6;
-                        if (value > maxValue) e.target.value = maxValue;
-                        if (value < 1) e.target.value = 1;
-                      }}
-                    />
+                    // For E-Byke private tours show a dropdown with priced options
+                    (service.titleKey === 'privateEBikeTour' ? (
+                      <div>
+                        {!selectedEBykeOption && (
+                          <div className="space-y-4">
+                            <div className="text-white/80 text-sm font-medium mb-3">Choose your experience:</div>
+                            {service.subOptions && service.subOptions.map((opt, index) => (
+                              <button
+                                key={opt.titleKey}
+                                type="button"
+                                onClick={() => setSelectedEBykeOption(opt)}
+                                className="w-full group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md border border-white/20 hover:border-white/40 transition-all duration-500 hover:scale-[1.02] hover:shadow-xl"
+                              >
+                                {/* Gradient overlay on hover */}
+                                <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 via-teal-500/20 to-cyan-600/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500" />
+                                
+                                <div className="relative p-6 text-left">
+                                  <div className="flex items-start gap-4">
+                                    {/* Icon/Number indicator */}
+                                    <div className="flex-shrink-0 w-12 h-12 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold text-lg shadow-lg">
+                                      {index + 1}
+                                    </div>
+                                    
+                                    {/* Content */}
+                                    <div className="flex-1">
+                                      <h4 className="text-white font-semibold text-lg mb-2 group-hover:text-emerald-300 transition-colors duration-300">
+                                        {t[opt.titleKey]}
+                                      </h4>
+                                      <p className="text-white/70 text-sm leading-relaxed">
+                                        {t[opt.descKey]}
+                                      </p>
+                                      
+                                      {/* Price indicator 
+                                      <div className="mt-3 flex items-center gap-2">
+                                        <span className="text-emerald-400 font-semibold">324€</span>
+                                        <span className="text-white/50 text-sm">/person</span>
+                                        <svg className="w-4 h-4 text-emerald-400 group-hover:translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+                                        </svg>
+                                      </div>*/}
+                                    </div>
+                                  </div>
+                                </div>
+                              </button>
+                            ))}
+                          </div>
+                        )}
+
+                        {selectedEBykeOption && (
+                          <div className="mb-4">
+                            <div className="flex items-center justify-between p-4 rounded-2xl bg-gradient-to-br from-emerald-400/20 to-teal-500/20 backdrop-blur-md border border-emerald-400/30">
+                              <div className="flex items-center gap-3">
+                                <div className="w-10 h-10 rounded-full bg-gradient-to-br from-emerald-400 to-teal-500 flex items-center justify-center text-white font-bold shadow-lg">
+                                  ✓
+                                </div>
+                                <div>
+                                  <div className="text-white font-semibold">{t[selectedEBykeOption.titleKey]}</div>
+                                  <div className="text-white/70 text-sm">Selected experience</div>
+                                </div>
+                              </div>
+                              <button
+                                type="button"
+                                onClick={() => setSelectedEBykeOption(null)}
+                                className="text-white/60 hover:text-white transition-colors duration-200"
+                              >
+                                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                                </svg>
+                              </button>
+                            </div>
+                          </div>
+                        )}
+                        
+                        {selectedEBykeOption && (
+                          <>
+                            <div>
+                              <label className="text-white/80 text-sm font-medium mb-2 block">Number of participants:</label>
+                              <select
+                                name="persons"
+                                value={formData.persons}
+                                onChange={handleInputChange}
+                                className="w-full border border-white/20 rounded-xl py-3 px-4 bg-black text-white placeholder-white/50 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/50 focus:outline-none text-sm transition-all duration-300 appearance-none cursor-pointer"
+                                required
+                              >
+                                <option value="" disabled>{t.selectParticipants}</option>
+                                {selectedEBykeOption.titleKey === 'aperibikeTour' ? (
+                                  <>
+                                    <option value="350">{t.privateTour1_2}</option>
+                                    <option value="375">{t.privateTour3}</option>
+                                    <option value="437.5">{t.privateTour4}</option>
+                                    <option value="500">{t.privateTour5}</option>
+                                    <option value="562.5">{t.privateTour6}</option>
+                                    <option value="625">{t.privateTour7}</option>
+                                    <option value="687.5">{t.privateTour8}</option>
+                                  </>
+                                ) : (
+                                  <>
+                                    <option value="275">{t.foodTour1_2}</option>
+                                    <option value="300">{t.foodTour3}</option>
+                                    <option value="350">{t.foodTour4}</option>
+                                    <option value="437.5">{t.foodTour5}</option>
+                                    <option value="487.5">{t.foodTour6}</option>
+                                    <option value="525">{t.foodTour7}</option>
+                                    <option value="600">{t.foodTour8}</option>
+                                  </>
+                                )}
+                              </select>
+                            </div>
+                          </>
+                        )}
+                      </div>
+                    ) : (
+                      <input
+                        name="persons"
+                        type="integer "
+                        value={formData.persons}
+                        onChange={(e) => {
+                          let value = parseInt(e.target.value) || 1;
+                          const maxValue = service.title === "Colosseum and Foro Romano Tour" ? 8 : 6;
+                          if (value > maxValue) value = maxValue;
+                          if (value < 1) value = 1;
+                          handleInputChange({ target: { name: 'persons', value: value.toString() } });
+                        }}
+                        className="w-full border border-white/20 rounded-xl py-3 px-4 bg-white/10 text-white placeholder-white/50 focus:border-amber-400 focus:ring-1 focus:ring-amber-400/50 focus:outline-none text-sm transition-all duration-300 backdrop-blur-sm"
+                        placeholder={t.personCount}
+                        required
+                      />
+                    ))
                   )}
                   <span className="absolute right-3 top-1/2 transform -translate-y-1/2 text-white/60 text-xs">
                     {service.title === "Rome Vespa Tour" ? t.onlyOnePerson : t.minTwo}
@@ -348,46 +518,72 @@ function ServiceModal({ service, onClose }) {
                 </div>
               </div>
 
-              {/* Language Preference Dropdown */}
-              {availableLanguages.length > 0 && (
-                <select
-                  name="language"
-                  value={selectedLanguage}
-                  onChange={(e) => setSelectedLanguage(e.target.value)}
-                  className="w-full border border-white/20 rounded-xl py-3 px-4 bg-black text-white placeholder-white/50 focus:border-purple-400 focus:ring-1 focus:ring-purple-400/50 focus:outline-none text-sm transition-all duration-300 appearance-none cursor-pointer"
-                  required
-                >
-                  <option value="">{t.selectLanguage}</option>
-                  {availableLanguages.map((lang) => (
-                    <option key={lang.code} value={lang.code}>
-                      {lang.flag} {lang.name}
-                    </option>
-                  ))}
-                </select>
+              {/* Language Preference Dropdown removed per requirements */}
+              
+              {/* Package Selection for Private Colosseum Tour */}
+              {service.titleKey === "privateColosseum" && (
+                <div className="mb-5">
+                  <label className="text-white/80 text-sm font-medium mb-3 block">{t.selectPackage}</label>
+                  <div className="space-y-3">
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <input
+                        type="radio"
+                        name="package"
+                        value="express"
+                        checked={selectedPackage === 'express'}
+                        onChange={(e) => setSelectedPackage(e.target.value)}
+                        className="w-4 h-4 text-amber-400 bg-white/10 border-white/30 focus:ring-amber-400/50 focus:ring-2"
+                        required
+                      />
+                      <div className="flex-1">
+                        <div className="text-white font-medium">{t.expressPackage}</div>
+                        <div className="text-white/60 text-xs">1h 15min - 200€</div>
+                      </div>
+                    </label>
+                    <label className="flex items-center gap-3 cursor-pointer group">
+                      <input
+                        type="radio"
+                        name="package"
+                        value="full"
+                        checked={selectedPackage === 'full'}
+                        onChange={(e) => setSelectedPackage(e.target.value)}
+                        className="w-4 h-4 text-amber-400 bg-white/10 border-white/30 focus:ring-amber-400/50 focus:ring-2"
+                        required
+                      />
+                      <div className="flex-1">
+                        <div className="text-white font-medium">{t.fullTourPackage}</div>
+                        <div className="text-white/60 text-xs">2h 45min - 270€</div>
+                      </div>
+                    </label>
+                  </div>
+                </div>
               )}
               
               {/* Time Options Dropdown for Private Colosseum Tour */}
               {service.titleKey === "privateColosseum" && (
-                <select
-                  name="startTime"
-                  className="w-full border border-white/20 rounded-xl py-3 px-4 bg-black text-white placeholder-white/50 focus:border-amber-400 focus:ring-1 focus:ring-amber-400/50 focus:outline-none text-sm transition-all duration-300 appearance-none cursor-pointer"
-                  defaultValue=""
-                  required
-                >
-                  <option value="" disabled>Select Start Time Option</option>
-                  <option value="option1">9:00 - 14:30</option>
-                  <option value="option2">9:00 - 13:30</option>
-                </select>
+                <div className="mb-3">
+                  <label className="text-white/80 text-sm font-medium mb-2 block">{t.selectTourTime}</label>
+                  <select
+                    name="startTime"
+                    value={formData.startTime}
+                    onChange={handleInputChange}
+                    className="w-full border border-white/20 rounded-xl py-3 px-4 bg-black text-white placeholder-white/50 focus:border-amber-400 focus:ring-1 focus:ring-amber-400/50 focus:outline-none text-sm transition-all duration-300 appearance-none cursor-pointer"
+                    required
+                  >
+                    <option value="" disabled>{t.selectTourTime || 'Select Start Time Option'}</option>
+                    <option value="option1">9:00 - 14:30</option>
+                    <option value="option2">9:00 - 13:30</option>
+                  </select>
+                </div>
               )}
               
               {/* Time Selection for Colosseum and Foro Romano Tour */}
               {service.title === "Colosseum and Foro Romano Tour" && (
                 <div className="mb-3">
                   <ModernTimePicker
-                    selected=""
+                    selected={formData.time}
                     onSelect={(time) => {
-                      const input = document.querySelector('input[name="time"]');
-                      if (input) input.value = time;
+                      handleInputChange({ target: { name: 'time', value: time } });
                     }}
                     placeholder={t.selectTourTime}
                     interval={60}
@@ -397,6 +593,7 @@ function ServiceModal({ service, onClose }) {
                   <input
                     name="time"
                     type="hidden"
+                    value={formData.time}
                     required
                   />
                 </div>
@@ -479,32 +676,77 @@ function ServiceModal({ service, onClose }) {
                 </div>
               )}
 
-              {/* Terms & Conditions Checkbox */}
-              <div className="flex items-start gap-3 text-white/80 text-sm pt-2 bg-white/5 p-4 rounded-lg border border-white/10 hover:border-white/20 transition-colors">
-                <input
-                  type="checkbox"
-                  checked={acceptTerms}
-                  onChange={(e) => setAcceptTerms(e.target.checked)}
-                  className="accent-purple-400 flex-shrink-0 w-4 h-4 mt-0.5 cursor-pointer"
-                />
-                <label className="cursor-pointer">
-                  {t.acceptTerms}{" "}
-                  <a href="/terms-and-conditions" className="text-purple-300 hover:text-purple-200 underline font-medium">
-                    {t.termsAndConditions}
-                  </a>
-                </label>
-              </div>
+              {/* Common form fields - show only after package/option selection */}
+              {(selectedEBykeOption || (service.titleKey === "privateColosseum" && selectedPackage) || formData.persons) && (
+                <>
+                  <div className="mt-6 space-y-3">
+                    <div>
+                      <label className="text-white/80 text-sm font-medium mb-2 block">{t.yourName}</label>
+                      <input
+                        name="name"
+                        type="text"
+                        value={formData.name}
+                        onChange={handleInputChange}
+                        className="w-full border border-white/20 rounded-xl py-3 px-4 bg-white/10 text-white placeholder-white/50 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/50 focus:outline-none text-sm transition-all duration-300 backdrop-blur-sm"
+                        placeholder={t.yourName}
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="text-white/80 text-sm font-medium mb-2 block">{t.emailAddress}</label>
+                      <input
+                        name="email"
+                        type="email"
+                        value={formData.email}
+                        onChange={handleInputChange}
+                        className="w-full border border-white/20 rounded-xl py-3 px-4 bg-white/10 text-white placeholder-white/50 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/50 focus:outline-none text-sm transition-all duration-300 backdrop-blur-sm"
+                        placeholder={t.emailAddress}
+                        required
+                      />
+                    </div>
+                    
+                    <div>
+                      <label className="text-white/80 text-sm font-medium mb-2 block">{t.selectDate}</label>
+                      <input
+                        name="date"
+                        type="date"
+                        value={formData.date}
+                        onChange={handleInputChange}
+                        className="w-full border border-white/20 rounded-xl py-3 px-4 bg-white/10 text-white placeholder-white/50 focus:border-emerald-400 focus:ring-1 focus:ring-emerald-400/50 focus:outline-none text-sm transition-all duration-300 backdrop-blur-sm"
+                        required
+                      />
+                    </div>
+                  </div>
 
-              {/* Enhanced PayPal Payment Button */}
-              <button
-                type="submit"
-                className="w-full py-3 mt-4 rounded-xl font-semibold bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 text-white hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 hover:scale-105 hover:shadow-lg hover:shadow-purple-500/25 transition-all duration-300 text-sm flex items-center justify-center gap-2"
-              >
-                <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-                  <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
-                </svg>
-                {t.payWithPayPal} - {service.price}€{t.pricePerPerson}
-              </button>
+                  {/* Payment Button - show only after package selection */}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const bookingData = {
+                        persons: formData.persons,
+                        time: formData.time || 'selected',
+                        package: selectedPackage || 'selected',
+                        service: service.title,
+                        price: selectedEBykeOption ? formData.persons : (service.titleKey === "privateColosseum" ? (selectedPackage === 'express' ? '200' : '270') : service.price),
+                        name: formData.name,
+                        email: formData.email,
+                        date: formData.date,
+                        startTime: formData.startTime
+                      };
+                      handlePayPalPayment(bookingData);
+                    }}
+                    disabled={!isFormValid()}
+                    className={`mt-6 w-full py-3 px-4 rounded-xl font-medium transition-all duration-300 ${
+                      isFormValid()
+                        ? 'bg-emerald-500 hover:bg-emerald-600 text-white cursor-pointer shadow-lg shadow-emerald-500/25'
+                        : 'bg-gray-600 text-gray-400 cursor-not-allowed opacity-50'
+                    }`}
+                  >
+                    {t.proceedToPayment || 'Proceed to Payment'}
+                  </button>
+                </>
+              )}
               
               <div className="text-center mt-2">
                 <p className="text-white/60 text-xs">
@@ -556,16 +798,32 @@ export default function Tour() {
 
   const tours = [
     {
+      image: "/ebyke.jpeg",
+      titleKey: "privateEBikeTour",
+      descKey: "privateEBikeTour_desc",
+      price: "324",
+      place: "Rome",
+      link: "/tour-ebyke",
+      gradient: "from-emerald-400 via-teal-500 to-cyan-600",
+      languages: "🇺🇸 🇪🇸 🇷🇺",
+      isEByke: true,
+      subOptions: [
+        { titleKey: 'panoramicTour', descKey: 'panoramicTour_desc', price: '324' },
+        { titleKey: 'aperibikeTour', descKey: 'aperibikeTour_desc', price: '324' },
+        { titleKey: 'foodTourBike', descKey: 'foodTourBike_desc', price: '324' },
+      ]
+    },
+    {
       image: "/hambtn.jpg",
       titleKey: "privateColosseum",
       descKey: "privateColosseum_desc",
-      price: "350",
+      price: "starting from 200",
       place: "Rome",
       link: "/tour-2",
       gradient: "from-amber-400 via-orange-500 to-red-500",
       languages: "🇺🇸 🇬🇧 🇪🇸 🇷🇺",
     },
-    {
+    /* {
       image: "/colosseum-underground.jpg",
       titleKey: "colossiumUnderground",
       descKey: "colossiumUnderground_desc",
@@ -574,7 +832,7 @@ export default function Tour() {
       link: "/tour-7",
       gradient: "from-stone-400 via-gray-500 to-slate-600",
       languages: "🇺🇸 🇬🇧 🇪🇸 🇷🇺",
-    },
+    }, */
     {
       image: "/vespa-tour.jpg",
       titleKey: "romeVespaTour",
@@ -585,7 +843,7 @@ export default function Tour() {
       gradient: "from-blue-400 via-purple-500 to-indigo-600",
       languages: "🇺🇸",
     },
-    {
+    /* {
       image: "/ancient.jpeg",
       titleKey: "colossiumArena",
       descKey: "colossiumArena_desc",
@@ -594,7 +852,7 @@ export default function Tour() {
       link: "/tour-5",
       gradient: "from-red-400 via-rose-500 to-pink-600",
       languages: "🇺🇸 🇬🇧 🇪🇸 🇷🇺",
-    },
+    }, */
     {
       image: "/trevi1.jpg",
       titleKey: "treviPantheon",
@@ -613,7 +871,7 @@ export default function Tour() {
       place: "Rome",
       link: "/tour-2",
       gradient: "from-emerald-400 via-teal-500 to-cyan-600",
-      languages: "🇺🇸 🇬🇧 🇪🇸 🇷🇺 🇩🇪",
+      languages: "🇺🇸 🇬🇧 🇪🇸 🇷🇺 🇩🇪 🇫🇷",
     },
     {
       image: "/fount.jpeg",
@@ -625,7 +883,7 @@ export default function Tour() {
       gradient: "from-slate-400 via-gray-500 to-stone-600",
       languages: "🇺🇸 🇬🇧 🇪🇸 🇷🇺",
     },
-     {
+     /* {
       image: "/col.jpeg",
       titleKey: "colossiumAncientRome",
       descKey: "colossiumAncientRome_desc",
@@ -634,17 +892,7 @@ export default function Tour() {
       link: "/tour-8",
       gradient: "from-indigo-400 via-blue-500 to-cyan-600",
       languages: "🇺🇸 🇬🇧 🇪🇸 🇷🇺",
-    },
-    {
-      image: "/food.jpeg",
-      titleKey: "Byke Tour",
-      descKey: "foodTour_desc",
-      price: "60",
-      place: "Rome",
-      link: "/tour-11",
-      gradient: "from-orange-400 via-red-500 to-rose-600",
-      languages: "🇺🇸 🇬🇧 🇪🇸 🇷🇺",
-    },
+    }, */
     {
       image: "/vat-mus.jpeg",
       titleKey: "vipVatican",
@@ -735,7 +983,7 @@ export default function Tour() {
             </div>
 
             {/* Main Title */}
-            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-6 sm:mb-8 bg-gradient-to-r from-blue-200 via-purple-300 to-amber-400 bg-clip-text text-transparent drop-shadow-2xl">
+            <h1 className="text-3xl sm:text-4xl md:text-5xl lg:text-7xl font-bold mb-6 sm:mb-8 bg-gradient-to-r from-blue-200 via-purple-300 to-amber-400 bg-clip-text text-transparent drop-shadow-2xl font-futura">
               {t.mainTitle}
             </h1>
             
@@ -755,7 +1003,7 @@ export default function Tour() {
         <section className="py-0 px-4 sm:px-6 md:px-8">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-8 sm:mb-12 md:mb-16">
-              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6">
+              <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-bold text-white mb-4 sm:mb-6 font-futura">
                 {t.chooseYourTour}
               </h2>
               <div className="w-16 sm:w-20 md:w-24 h-0.5 sm:h-1 bg-gradient-to-r from-blue-400 to-purple-500 mx-auto mb-4 sm:mb-6 rounded-full" />
@@ -780,7 +1028,7 @@ export default function Tour() {
             </div>
             
             {/* Center the last 2 cards */}
-            {tours.length > 9 && (
+            {tours.length > 6 && (
               <div className="flex justify-center mt-6 sm:mt-8">
                 <div className="grid gap-4 sm:gap-6 md:gap-8 grid-cols-1 sm:grid-cols-2 max-w-3xl w-full">
                   {tours.slice(9).map((tour, idx) => (
@@ -808,7 +1056,7 @@ export default function Tour() {
          {/* Call to Action */}
                 <section className="py-20 px-8">
                   <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
+                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 font-futura">
                       {t.discoverRoman}
                     </h2>
                     <p className="text-xl text-white/70 mb-12 max-w-2xl mx-auto">

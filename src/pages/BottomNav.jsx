@@ -119,8 +119,7 @@ export default function BottomNav({ setServicesHovered }) {
                     group-hover:scale-110 group-hover:text-amber-400
                     group-hover:drop-shadow-[0_0_8px_rgba(251,191,36,0.8)]
                     group-hover:-translate-y-1
-                    ${pathname === link.to ? 'font-semibold scale-110 text-amber-400' : ''}
-                  `}
+                    ${pathname === link.to ? 'font-semibold scale-110 text-amber-400' : ''}`}
                   style={{
                     perspective: '600px',
                     textShadow: pathname === link.to ? '0 0 10px rgba(251,191,36,0.6)' : 'none',
@@ -156,53 +155,59 @@ export default function BottomNav({ setServicesHovered }) {
                   absolute left-0 right-0 -bottom-1 h-0.5 bg-gradient-to-r from-amber-400 via-orange-500 to-amber-400
                   w-0 group-hover:w-full transition-all duration-500 origin-center
                   shadow-[0_0_10px_rgba(251,191,36,0.6)]
-                  ${pathname === link.to ? 'w-full' : ''}
-                `}
+                  ${pathname === link.to ? 'w-full' : ''}`}
               />
-              
+
               {/* Pulse effect on hover */}
               <span
                 className={`
                   absolute left-1/2 -translate-x-1/2 -bottom-1 h-0.5 bg-amber-400
                   w-0 group-hover:w-full transition-all duration-700 origin-center
                   blur-sm opacity-0 group-hover:opacity-60
-                  ${pathname === link.to ? 'w-full opacity-60' : ''}
-                `}
+                  ${pathname === link.to ? 'w-full opacity-60' : ''}`}
               />
 
               {/* Dropup menu */}
               <AnimatePresence>
                 {hoveredItem === link.to && link.hasDropup && (
                   <motion.div
-                    variants={dropupVariants}
-                    initial="hidden"
-                    animate="visible"
-                    exit="exit"
-                    className="absolute bottom-full left-3/2 transform -translate-x-3/2 mb-3 pointer-events-auto"
-                    style={{ zIndex: 9999 }}
-                  >
-                    <div
-                      className="flex flex-col items-center px-6 py-3 rounded-2xl
-                                 bg-white/60 backdrop-blur-3xl border border-white/10
-                                 shadow-[0_0_20px_rgba(255,255,255,0.3)]"
-                      style={{ minWidth: '200px' }}
-                    >
-                      {link.dropupItems.map((item, idx) => (
-                        <React.Fragment key={item.to}>
-                          {idx !== 0 && <div className="w-full border-t border-white/20 my-1" />}
-                          <Link
-                            to={item.to}
-                            className="w-full text-white text-center py-2 font-semibold transition-all
-                                        hover:bg-gradient-to-r hover:from-amber-400 hover:to-orange-500
-                                        hover:bg-clip-text hover:text-transparent"
-                            onClick={() => setHoveredItem(null)}
-                          >
-                            {t[item.labelKey]}
-                          </Link>
-                        </React.Fragment>
-                      ))}
-                    </div>
-                  </motion.div>
+  variants={dropupVariants}
+  initial="hidden"
+  animate="visible"
+  exit="exit"
+  className="absolute bottom-full left-3/2 transform -translate-x-3/2 mb-3 pointer-events-auto"
+  style={{
+    zIndex: 9999,
+    backgroundColor: 'rgba(0, 0, 0, 0.4)',  
+    backdropFilter: 'blur(20px)',  
+    borderRadius: '10px',  
+    border: '1px solid rgba(255, 255, 255, 0.2)',  
+    boxShadow: '0 8px 32px rgba(0, 0, 0, 0.5)',  
+  }}
+>
+  <div
+    className="flex flex-col items-center px-6 py-3 rounded-2xl
+                bg-white/20 backdrop-blur-xl border border-white/30
+                shadow-[0_4px_10px_rgba(0,0,0,0.15)]"
+    style={{ minWidth: '200px' }}
+  >
+    {link.dropupItems.map((item, idx) => (
+      <React.Fragment key={item.to}>
+        {idx !== 0 && <div className="w-full border-t border-white/20 my-1" />}
+        <Link
+          to={item.to}
+          className="w-full text-white text-center py-2 font-semibold transition-all
+                      hover:bg-gradient-to-r hover:from-amber-400 hover:to-orange-500
+                      hover:bg-clip-text hover:text-transparent"
+          onClick={() => setHoveredItem(null)}
+        >
+          {t[item.labelKey]}
+        </Link>
+      </React.Fragment>
+    ))}
+  </div>
+</motion.div>
+
                 )}
               </AnimatePresence>
             </li>

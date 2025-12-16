@@ -200,9 +200,6 @@ export default function About() {
                             <div className="text-amber-400 font-semibold text-sm sm:text-base">
                               {testimonial.author}
                             </div>
-                            <div className="text-white/60 text-xs sm:text-sm">
-                              {testimonial.location}
-                            </div>
                           </div>
                         </div>
                       ))}
@@ -230,9 +227,14 @@ export default function About() {
                       href="https://www.tripadvisor.co.uk/Attraction_Review-g187791-d33993227-Reviews-Myguideinrome-Rome_Lazio.html" 
                       target="_blank" 
                       rel="noopener noreferrer"
-                      className="px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base bg-gradient-to-r from-amber-400 to-orange-500 text-white font-semibold rounded-full hover:from-amber-500 hover:to-orange-600 transition-all duration-300 shadow-lg hover:shadow-amber-500/50 hover:scale-105"
+                      className="px-6 sm:px-8 py-2 sm:py-3 text-sm sm:text-base bg-gradient-to-br from-[#2E7D32] to-[#4CAF50] text-white font-semibold rounded-full hover:from-[#2E7D32] hover:to-[#4CAF50] transition-all duration-300 shadow-lg hover:shadow-[#4CAF50]/50 hover:scale-105 flex items-center gap-2 sm:gap-3"
                     >
-                      {t.viewMoreReviews || "View More Reviews"}
+                      <span>Tripadvisor Reviews</span>
+                      <img 
+                        src="/tripadvisor.png" 
+                        alt="TripAdvisor" 
+                        className="h-6 sm:h-8 object-contain"
+                      />
                     </a>
                   </div>
                 </div>

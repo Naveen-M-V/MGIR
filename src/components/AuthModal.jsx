@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import axios from "axios";
+import { authAPI } from "../api";
 import { useAuth } from "../context/AuthContext";
 import { Eye, EyeOff, Mail, Lock, User, Phone, MapPin, CheckCircle2, ArrowRight, Sparkles } from "lucide-react";
 
@@ -59,7 +59,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }) {
     setError("");
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/login', {
+      const response = await authAPI.login({
         username: loginData.username,
         password: loginData.password,
         remindMe: loginData.remindMe
@@ -94,7 +94,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }) {
     }
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/signup', {
+      const response = await authAPI.signup({
         username: signupData.username,
         email: signupData.email
       });
@@ -128,7 +128,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }) {
       // Send only email + otp for verification step — do not send placeholder
       // password/fullName/agreeTerms. The server will respond 200 if OTP is
       // valid and needs completion.
-      const response = await axios.post('http://localhost:5000/api/auth/verify-otp', {
+      const response = await authAPI.verifyOTP({
         email: signupData.email,
         otp: otp,
         username: signupData.username
@@ -179,7 +179,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }) {
 
     try {
       // Update user with complete details
-      const response = await axios.post('http://localhost:5000/api/auth/verify-otp', {
+      const response = await authAPI.verifyOTP({
         email: signupData.email,
         otp: otp,
         username: signupData.username,
@@ -231,7 +231,7 @@ export default function AuthModal({ isOpen, onClose, initialMode = "login" }) {
     setError("");
 
     try {
-      const response = await axios.post('http://localhost:5000/api/auth/resend-otp', {
+      const response = await authAPI.resendOTP({
         email: signupData.email
       });
 

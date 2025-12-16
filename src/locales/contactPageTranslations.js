@@ -9,10 +9,10 @@ export const contactPageTranslations = {
     home: "Home",
     
     // Page title
-    contactUs: "Contact Us",
+    contactUs: "CONTACT US",
     
     // Hero section
-    heroTitle: "Contact Us",
+    heroTitle: "CONTACT US",
     heroSubtitle: "Ready to explore the Eternal City? Reach out to us anytime.",
     
     // Contact Form Section

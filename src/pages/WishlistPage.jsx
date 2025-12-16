@@ -59,7 +59,12 @@ export default function WishlistPage() {
     
     if (isAuthenticated) {
       // For authenticated users, wishlist is array of strings
-      return wishlist.map(title => ({
+      // Remove duplicates by using Set with trimmed and normalized titles
+      const normalizedTitles = wishlist.map(title => title.trim());
+      const uniqueTitles = [...new Set(normalizedTitles)];
+      console.log('WishlistPage: Unique titles after deduplication:', uniqueTitles);
+      
+      return uniqueTitles.map(title => ({
         title,
         description: "Saved service from My Guide In Rome",
         category: "service",
@@ -67,7 +72,13 @@ export default function WishlistPage() {
       }));
     } else {
       // For guest users, wishlist is array of objects
-      return wishlist;
+      // Remove duplicates by title with trimming
+      const uniqueItems = wishlist.filter((item, index, self) => {
+        const normalizedTitle = item.title.trim();
+        return index === self.findIndex((i) => i.title.trim() === normalizedTitle);
+      });
+      console.log('WishlistPage: Unique items after deduplication:', uniqueItems);
+      return uniqueItems;
     }
   };
 
@@ -215,7 +226,7 @@ export default function WishlistPage() {
                   <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                     {wishlistItems.map((item, index) => (
                       <div
-                        key={index}
+                        key={item.title}
                         className="group relative overflow-hidden rounded-2xl bg-gradient-to-br from-white/10 to-white/5 backdrop-blur-md border border-white/20 hover:border-white/40 transition-all duration-500 hover:shadow-2xl"
                         style={{ animationDelay: `${index * 50}ms` }}
                       >
@@ -301,27 +312,7 @@ export default function WishlistPage() {
               </section>
             ) : wishlistItems.length === 0 ? (
               /* Empty State */
-              <div className="text-center py-20">
-                <div className="w-32 h-32 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-8">
-                  <FaHeart className="w-16 h-16 text-white/30" />
-                </div>
-                <h3 className="text-3xl font-bold text-white mb-4">Your wishlist is empty</h3>
-                <p className="text-white/70 text-lg mb-8 max-w-2xl mx-auto">
-                  Start exploring our amazing tours and services. Click the heart icon on any item to add it to your wishlist!
-                </p>
-                <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                  <Link to="/services">
-                    <button className="px-8 py-4 bg-gradient-to-r from-red-500 to-pink-600 text-white font-semibold rounded-full hover:from-red-600 hover:to-pink-700 transition-all duration-300 shadow-2xl hover:shadow-red-500/25 hover:scale-105">
-                      Explore Services
-                    </button>
-                  </Link>
-                  <Link to="/gallery">
-                    <button className="px-8 py-4 border-2 border-white/30 text-white font-semibold rounded-full hover:bg-white/10 hover:border-white/50 transition-all duration-300">
-                      Browse Gallery
-                    </button>
-                  </Link>
-                </div>
-              </div>
+              null
             ) : null
             }
           </div>

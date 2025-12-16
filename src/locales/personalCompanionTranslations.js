@@ -1,5 +1,9 @@
 const personalCompanionTranslations = {
   en: {
+    // Wishlist button
+    addToWishlist: "Add to Wishlist",
+    loginToAddWishlist: "Login to Add Wishlist",
+    
     // Hero Section
     homeButton: "Home",
     mainTitle: "PERSONAL COMPANION",
@@ -11,8 +15,8 @@ const personalCompanionTranslations = {
     selectPreferred: "Select your preferred option and let us create an unforgettable Roman adventure for you",
 
     // Without Car Option
-    withoutCar: "Without Car",
-    walkingTours: "Walking tours and public transport",
+    withoutCar: "Companion",
+    walkingTours: "Your personal tour companion will help you navigate Rome in easiest way",
     day1: "1 Day",
     day2: "2 Days",
     day3: "3 Days",
@@ -20,10 +24,10 @@ const personalCompanionTranslations = {
     bookWithoutCar: "Book Without Car",
 
     // With Car Option
-    withCar: "With Car",
-    privateCarDriver: "Private car and driver included",
+    withCar: "Companion with Car",
+    privateCarDriver: "Your personal tour companion with their own car",
     bookWithCar: "Book With Car",
-    carService: "With Car Service - 3 Door Fiat 500",
+    carService: "Companion with Car (3 Door Fiat 500)",
     perDay: "Per day up to 8hr and up to 50kms",
 
     // Booking Modal
@@ -41,7 +45,7 @@ const personalCompanionTranslations = {
     selectDate: "Select a date",
     acceptTerms: "I accept the",
     termsAndConditions: "Terms and Conditions",
-    payWithPayPal: "Pay with PayPal",
+    payWithPayPal: "Proceed to payment",
     securePayment: "Secure payment powered by PayPal",
     total: "total",
 
@@ -52,6 +56,10 @@ const personalCompanionTranslations = {
   },
 
   es: {
+    // Wishlist button
+    addToWishlist: "Añadir a la Lista de Deseos",
+    loginToAddWishlist: "Inicia Sesión para Añadir a la Lista",
+    
     // Hero Section
     homeButton: "Inicio",
     mainTitle: "ACOMPAÑANTE PERSONAL",
@@ -63,8 +71,8 @@ const personalCompanionTranslations = {
     selectPreferred: "Selecciona tu opción preferida y déjanos crear una aventura romana inolvidable para ti",
 
     // Without Car Option
-    withoutCar: "Sin coche",
-    walkingTours: "Recorridos a pie y transporte público",
+    withoutCar: "Compañera",
+    walkingTours: "Tu acompañante personal de viaje te ayudará a recorrer Roma de la manera más sencilla.",
     day1: "1 día",
     day2: "2 días",
     day3: "3 días",
@@ -72,10 +80,10 @@ const personalCompanionTranslations = {
     bookWithoutCar: "Reservar sin coche",
 
     // With Car Option
-    withCar: "Con coche",
-    privateCarDriver: "Coche privado con conductor incluido",
+    withCar: "Compañero con coche",
+    privateCarDriver: "Tu acompañante personal de viaje con su propio coche.",
     bookWithCar: "Reservar con coche",
-    carService: "Con servicio de coche - Fiat 500 de 3 puertas",
+    carService: "Compañero con coche (Fiat 500 de 3 puertas)",
     perDay: "Por día hasta 8 horas y hasta 50 km",
 
     // Booking Modal
@@ -93,7 +101,7 @@ const personalCompanionTranslations = {
     selectDate: "Selecciona una fecha",
     acceptTerms: "Acepto los",
     termsAndConditions: "Términos y Condiciones",
-    payWithPayPal: "Pagar con PayPal",
+    payWithPayPal: "Proceder al pago",
     securePayment: "Pago seguro con PayPal",
     total: "total",
 
@@ -104,9 +112,13 @@ const personalCompanionTranslations = {
   },
 
   ru: {
+    // Wishlist button
+    addToWishlist: "Добавить в Список Желаний",
+    loginToAddWishlist: "Войдите, чтобы Добавить в Список",
+    
     // Hero Section
     homeButton: "Главная",
-    mainTitle: "ЛИЧНЫЙ СПУТНИК",
+    mainTitle: "Персональный сопровождающий",
     subtitle: "Ваш персональный гид по скрытым сокровищам Рима",
     description: "Дополните свое исследование личным местным спутником, который откроет двери незабываемого римского опыта. Наши опытные гиды поделятся увлекательными историями о культуре, традициях и истории города, помогут вам в общении и предоставят ценные советы, чтобы вы максимально насладились каждым моментом. Больше никаких потерь в переулках.",
 
@@ -115,8 +127,8 @@ const personalCompanionTranslations = {
     selectPreferred: "Выберите предпочитаемый вариант и позвольте нам создать для вас незабываемое римское приключение",
 
     // Without Car Option
-    withoutCar: "Без автомобиля",
-    walkingTours: "Пешеходные экскурсии и общественный транспорт",
+    withoutCar: "Компаньон",
+    walkingTours: "Ваш персональный туристический компаньон поможет вам легко ориентироваться в Риме.",
     day1: "1 день",
     day2: "2 дня",
     day3: "3 дня",
@@ -124,10 +136,10 @@ const personalCompanionTranslations = {
     bookWithoutCar: "Забронировать без автомобиля",
 
     // With Car Option
-    withCar: "С автомобилем",
-    privateCarDriver: "В стоимость входит личный автомобиль и водитель",
+    withCar: "Спутник с автомобилем",
+    privateCarDriver: "Ваш персональный туристический компаньон с собственным автомобилем.",
     bookWithCar: "Забронировать с автомобилем",
-    carService: "С автосервисом - 3-дверный Fiat 500",
+    carService: "Спутник с автомобилем (3-дверный Fiat 500)",
     perDay: "В день до 8 часов и до 50 км",
 
     // Booking Modal
@@ -145,7 +157,7 @@ const personalCompanionTranslations = {
     selectDate: "Выберите дату",
     acceptTerms: "Я принимаю",
     termsAndConditions: "Условия использования",
-    payWithPayPal: "Оплатить через PayPal",
+    payWithPayPal: "Перейти к оплате",
     securePayment: "Безопасная оплата через PayPal",
     total: "всего",
 

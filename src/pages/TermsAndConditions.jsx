@@ -1,12 +1,56 @@
-import React from "react";
+import React, { useContext } from "react";
 import { Link } from "react-router-dom";
 import Footer from "../components/Footer";
 import TopNav from "../components/TopNav";
 import BackButton from "../components/BackButton";
 import FullscreenMenu from "./FullscreenMenu";
+import { LanguageContext } from "../context/LanguageContext";
+import { termsAndConditionsTranslations } from "../locales/termsAndConditionsTranslations";
 
 export default function TermsAndConditions() {
   const [isFullMenuOpen, setFullMenuOpen] = React.useState(false);
+  const { language } = useContext(LanguageContext);
+
+  const langMap = { EN: "en", ES: "es", RU: "ru" };
+  const currentLang = langMap[language] || "en";
+  const t =
+    termsAndConditionsTranslations[currentLang] || termsAndConditionsTranslations.en;
+
+  const renderBlock = (block, key) => {
+    if (block.type === "h3") {
+      return (
+        <h3 key={key} className="text-xl font-semibold text-emerald-300 mt-6 mb-2">
+          {block.text}
+        </h3>
+      );
+    }
+
+    if (block.type === "p") {
+      return <p key={key}>{block.text}</p>;
+    }
+
+    if (block.type === "ul") {
+      return (
+        <ul key={key} className="list-disc list-inside mt-3 space-y-2 ml-4">
+          {block.items.map((item, idx) => (
+            <li key={idx}>{item}</li>
+          ))}
+        </ul>
+      );
+    }
+
+    if (block.type === "lines") {
+      return (
+        <div key={key} className="mt-3 ml-4">
+          {block.items.map((line, idx) => (
+            <p key={idx}>{idx === 0 ? <strong>{line}</strong> : line}</p>
+          ))}
+        </div>
+      );
+    }
+
+    return null;
+  };
 
   return (
     <div className="relative min-h-screen overflow-hidden">
@@ -41,13 +85,13 @@ export default function TermsAndConditions() {
                   <svg className="w-5 h-5 group-hover:-translate-x-1 transition-transform duration-300" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6" />
                   </svg>
-                  Home
+                  {t.home}
                 </button>
               </Link>
             </div>
 
             <h1 className="text-5xl md:text-6xl font-bold mb-6 bg-gradient-to-r from-amber-200 via-yellow-300 to-orange-400 bg-clip-text text-transparent drop-shadow-2xl">
-              TERMS AND CONDITIONS
+              {t.title}
             </h1>
             
             <div className="w-32 h-1 bg-gradient-to-r from-amber-400 to-orange-500 mx-auto mb-8 rounded-full" />
@@ -58,7 +102,19 @@ export default function TermsAndConditions() {
         <section className="px-8 pb-20">
           <div className="max-w-4xl mx-auto bg-white/10 backdrop-blur-md rounded-3xl border border-white/20 p-8 md:p-12">
             <div className="text-white/90 space-y-6 leading-relaxed">
-              
+              {Array.isArray(t.sections) && t.sections.length > 0 ? (
+                t.sections.map((section, sectionIdx) => (
+                  <div key={sectionIdx}>
+                    <h2 className="text-2xl font-bold text-amber-300 mb-4">
+                      {section.title}
+                    </h2>
+                    {section.blocks.map((block, blockIdx) =>
+                      renderBlock(block, `${sectionIdx}-${blockIdx}`)
+                    )}
+                  </div>
+                ))
+              ) : (
+                <>
               <div>
                 <h2 className="text-2xl font-bold text-amber-300 mb-4">PRELIMINARY CONSIDERATIONS</h2>
                 <p>
@@ -386,6 +442,8 @@ export default function TermsAndConditions() {
                 </div>
               </div>
 
+                </>
+              )}
             </div>
           </div>
         </section>

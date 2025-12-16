@@ -170,10 +170,12 @@ function Home() {
         <div className="relative flex flex-col font-slab items-center justify-start min-h-screen text-center text-white pt-36 pb-20">
           <img src="logo.png" alt="Logo here" className="mb-2 w-56" />
 
-          <h1 className="text-3xl font-bold mb-2 tracking-wide font-premium">
+          <h1 className="text-3xl font-bold mb-2 tracking-wide font-futura">
             {t.experienceRomeAsLocal}
           </h1>
-          {t.ultimateRomanHoliday}
+          <p className="text-lg max-w-2xl mb-6 font-futura">
+            {t.ultimateRomanHoliday}
+          </p>
           <p className="text-lg max-w-2xl mb-6 font-slab"></p>
 
           <button

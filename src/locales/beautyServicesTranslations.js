@@ -59,7 +59,7 @@ export const beautyServicesTranslations = {
     completeFormAndSelectServices: "Complete form and select services",
     confirmCustomizedBooking: "Confirm Customized Booking",
     addToWishlist: "Add to Wishlist",
-    payWithPayPal: "Pay with PayPal",
+    payWithPayPal: "Proceed to payment",
     securePaymentPoweredByPayPal: "Secure payment powered by PayPal",
     
     // Hair Extension Warning
@@ -132,7 +132,7 @@ export const beautyServicesTranslations = {
     completeFormAndSelectServices: "Complete el formulario y seleccione los servicios",
     confirmCustomizedBooking: "Confirmar reserva personalizada",
     addToWishlist: "Añadir a la lista de deseos",
-    payWithPayPal: "Pagar con PayPal",
+    payWithPayPal: "Proceder al pago",
     securePaymentPoweredByPayPal: "Pago seguro con PayPal",
     
     // Hair Extension Warning
@@ -205,7 +205,7 @@ export const beautyServicesTranslations = {
     completeFormAndSelectServices: "Заполните форму и выберите услуги",
     confirmCustomizedBooking: "Подтвердите индивидуальное бронирование",
     addToWishlist: "Добавить в список желаний",
-    payWithPayPal: "Оплатить через PayPal",
+    payWithPayPal: "Перейти к оплате",
     securePaymentPoweredByPayPal: "Безопасная оплата через PayPal",
     
     // Hair Extension Warning

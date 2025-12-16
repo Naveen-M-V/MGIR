@@ -36,14 +36,17 @@ export default function Personal() {
   const [peopleCount, setPeopleCount] = useState(2);
   const [isImageFlowOpen, setIsImageFlowOpen] = useState(false);
   const [imageStep, setImageStep] = useState(1);
-  const imageSources = ["/image-step-1.png", "/image-step-2.png", "/image-step-3.png"]; // replace with your actual asset paths
-  const [callDate, setCallDate] = useState("");
+  const imageSources = ["/image-step-1.png", "/image-step-2.png", "/image-step-3.png"];   const [callDate, setCallDate] = useState("");
   const [callTime, setCallTime] = useState("");
-  const [cardNumber, setCardNumber] = useState("");
-  const [expiry, setExpiry] = useState("");
-  const [cvv, setCvv] = useState("");
   const [isPaying, setIsPaying] = useState(false);
   const [acceptTerms, setAcceptTerms] = useState(false);
+  
+  // Validation states
+  const [errors, setErrors] = useState({});
+  const [contactName, setContactName] = useState("");
+  const [contactNumber, setContactNumber] = useState("");
+  const [whatsappNumber, setWhatsappNumber] = useState("");
+  const [email, setEmail] = useState("");
 
   // Parallax effect
   useEffect(() => {
@@ -129,6 +132,63 @@ export default function Personal() {
     }
   };
 
+  // Validation functions
+  const validateContactDetails = () => {
+    const newErrors = {};
+    
+    // Name validation - mandatory
+    if (!contactName.trim()) {
+      newErrors.contactName = 'Name is required';
+    } else if (contactName.trim().length < 2) {
+      newErrors.contactName = 'Name must be at least 2 characters';
+    }
+    
+    // Contact number validation - mandatory, numbers only
+    if (!contactNumber.trim()) {
+      newErrors.contactNumber = 'Contact number is required';
+    } else if (!/^\+?\d+$/.test(contactNumber.replace(/\s/g, ''))) {
+      newErrors.contactNumber = 'Contact number must contain only numbers';
+    } else if (contactNumber.replace(/\D/g, '').length < 10) {
+      newErrors.contactNumber = 'Contact number must be at least 10 digits';
+    }
+    
+    // WhatsApp number validation - optional but numbers only if provided
+    if (whatsappNumber.trim() && !/^\+?\d+$/.test(whatsappNumber.replace(/\s/g, ''))) {
+      newErrors.whatsappNumber = 'WhatsApp number must contain only numbers';
+    } else if (whatsappNumber && whatsappNumber.replace(/\D/g, '').length < 10) {
+      newErrors.whatsappNumber = 'WhatsApp number must be at least 10 digits';
+    }
+    
+    // Email validation - mandatory
+    if (!email.trim()) {
+      newErrors.email = 'Email is required';
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+      newErrors.email = 'Please enter a valid email address';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const validateDateTime = () => {
+    const newErrors = {};
+    
+    if (!callDate) {
+      newErrors.callDate = 'Please select a date';
+    }
+    
+    if (!callTime) {
+      newErrors.callTime = 'Please select a time';
+    }
+    
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const clearErrors = () => {
+    setErrors({});
+  };
+
   const handleProgressBarDrag = (e) => {
     if (videoRef.current && progressBarRef.current && e.buttons === 1) {
       const rect = progressBarRef.current.getBoundingClientRect();
@@ -204,7 +264,7 @@ export default function Personal() {
                       </Link>
                     </div>
             {/* Main Title */}
-            <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-purple-200 via-pink-300 to-amber-400 bg-clip-text text-transparent drop-shadow-2xl">
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-purple-200 via-pink-300 to-amber-400 bg-clip-text text-transparent drop-shadow-2xl uppercase">
               {t.personalCurator}
             </h1>
             
@@ -410,8 +470,8 @@ export default function Personal() {
 >
   {/* Close Button inside container */}
   <button
-    aria-label="Close"
-    title="Close"
+    aria-label={t.close}
+    title={t.close}
     onClick={() => setIsFormOpen(false)}
     className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 group z-50"
     >
@@ -436,14 +496,13 @@ export default function Personal() {
         </div>
         <div className="bg-gradient-to-br from-white/10 via-white/15 to-white/5 px-6 md:px-8 py-6 text-white/95">
           <p className="text-sm md:text-base mb-4 opacity-90"> 
-            This call will help our Expert to understand your unique interests and needs to
+            {t.introCallHelp}
           </p>
 
           <ul className="space-y-2 text-sm md:text-base list-disc pl-5 opacity-95">
-            <li>Custom-Designed Roman Journey: a meticulously planned, step-by-step PDF itinerary, perfectly paced to your preferences and travel style.</li>
-            <li>VIP Access & reservations: We leverage our network to secure tickets/tours for highly sought-after, often sold-out experiences (e.g., Colosseum Underground, Vatican Early Entry, Scavi/Borgo).</li>
-            <li>Elite Dining Portfolio: A curated list of hand-selected restaurant and cocktail bar recommendations, from Michelin-starred fine dining to the best local trattorias.</li>
-            <li>Zero-Friction Logistics: A tailored transportation plan (private drivers, taxi coordination, efficient use of metro) that minimizes travel time and maximizes enjoyment.</li>
+            {Array.isArray(t.introBullets)
+              ? t.introBullets.map((bullet, idx) => <li key={idx}>{bullet}</li>)
+              : null}
           </ul>
 
           {/* Info Card 
@@ -469,7 +528,7 @@ export default function Personal() {
               onClick={() => { setIsFormOpen(false); setIsOptionsOpen(true); }}
               className="btn-shine relative overflow-hidden px-10 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-purple-500 to-pink-600 shadow-lg shadow-purple-600/30 transition-all duration-300 hover:scale-105 hover:shadow-pink-500/40"
             >
-              <span className="relative z-10">Continue</span>
+              <span className="relative z-10">{t.continue}</span>
               <span className="shine" />
             </button>
           </div>
@@ -527,8 +586,8 @@ export default function Personal() {
 
             {/* Close Button inside container */}
             <button
-            aria-label="Close"
-            title="Close"
+            aria-label={t.close}
+            title={t.close}
             onClick={() => setIsOptionsOpen(false)}
             className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 group z-50"
             >
@@ -540,15 +599,15 @@ export default function Personal() {
 
             {/* Title */}
             <div className="px-8 pt-10 pb-6 text-center">
-              <h2 className="text-3xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-pink-400 via-rose-400 to-purple-400 bg-clip-text text-transparent drop-shadow-2xl">Choose an option</h2>
+              <h2 className="text-3xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-pink-400 via-rose-400 to-purple-400 bg-clip-text text-transparent drop-shadow-2xl">{t.chooseOption}</h2>
             </div>
 
             {/* Cards */}
             <div className="px-6 pb-6 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-8 items-stretch">
               {[
-                { days: '3 Days', eur: '€500 – €750', usd: '($550 – $825)', image: '/3day.jpeg' },
-                { days: '5 Days', eur: '€700 – €1200', usd: '($770 – $1320)', image: '/5day.jpeg' },
-                { days: '7 Days', eur: '€900 – €1500', usd: '($990 – $1650)', image: '/7day.jpeg' },
+                { days: t.threeDays, eur: '€500 – €750', usd: '($550 – $825)', image: '/3day.jpeg' },
+                { days: t.fiveDays, eur: '€700 – €1200', usd: '($770 – $1320)', image: '/5day.jpeg' },
+                { days: t.sevenDays, eur: '€900 – €1500', usd: '($990 – $1650)', image: '/7day.jpeg' },
               ].map((opt) => (
                 <button
                   key={opt.days}
@@ -579,7 +638,7 @@ export default function Personal() {
                 onClick={() => { setIsOptionsOpen(false); setIsFormOpen(true); }}
                 className="group relative overflow-hidden px-8 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-white/20 to-white/30 shadow-lg transition-all duration-300 hover:scale-105"
               >
-                <span className="relative z-10">Back</span>
+                <span className="relative z-10">{t.back}</span>
                 <span className="pointer-events-none absolute top-0 left-[-60%] h-full w-12 bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-[-20deg] opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out group-hover:left-[160%]" />
               </button>
             </div>
@@ -607,8 +666,8 @@ export default function Personal() {
             </div>
 
             <button
-            aria-label="Close"
-            title="Close"
+            aria-label={t.close}
+            title={t.close}
             onClick={() => setIsDetailsOpen(false)}
             className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 group z-50"
             >
@@ -619,15 +678,31 @@ export default function Personal() {
           </button>
 
             <div className="p-6 md:p-8 text-white/95">
-            <h3 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 bg-clip-text text-transparent drop-shadow-sm">{detailsStep === 1 ? 'Contact person’s details' : 'Choose a type' } {selectedPackage ? `– ${selectedPackage.days}` : ''}</h3>
+            <h3 className="text-3xl font-bold mb-6 text-center bg-gradient-to-r from-yellow-400 via-pink-500 to-purple-500 bg-clip-text text-transparent drop-shadow-sm">{detailsStep === 1 ? t.contactPersonDetails : t.chooseTypeDays} {selectedPackage ? `– ${selectedPackage.days}` : ''}</h3>
               {detailsStep === 1 ? (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="col-span-1 md:col-span-2">
-                    <label className="text-sm opacity-90">Contact person’s name</label>
-                    <input className="mt-2 w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" placeholder="Enter full name" />
+                    <label className="text-sm opacity-90">{t.contactPersonName} *</label>
+                    <input 
+                      value={contactName}
+                      onChange={(e) => {
+                        setContactName(e.target.value);
+                        if (errors.contactName) {
+                          setErrors({...errors, contactName: ''});
+                        }
+                      }}
+                      className={`mt-2 w-full rounded-xl bg-white/10 border px-3 py-2 outline-none focus:ring-2 focus:ring-white/30 ${
+                        errors.contactName ? 'border-red-400' : 'border-white/20'
+                      }`} 
+                      placeholder={t.enterFullName} 
+                      required
+                    />
+                    {errors.contactName && (
+                      <p className="mt-1 text-xs text-red-400">{errors.contactName}</p>
+                    )}
                   </div>
                   <div className="col-span-1">
-                    <label className="text-sm opacity-90">No. of people traveling</label>
+                    <label className="text-sm opacity-90">{t.noOfPeopleTraveling} *</label>
                     <div className="mt-2 flex items-center gap-3">
                       <button className="w-9 h-9 rounded-full bg-white/20 hover:bg-white/30" onClick={() => setPeopleCount((c) => Math.max(1, c-1))}>-</button>
                       <div className="px-4 py-2 rounded-lg bg-white/10 border border-white/20">{peopleCount}</div>
@@ -635,24 +710,86 @@ export default function Personal() {
                     </div>
                   </div>
                   <div className="col-span-1">
-                    <label className="text-sm opacity-90">Contact Number</label>
-                    <input className="mt-2 w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" placeholder="Enter number" />
+                    <label className="text-sm opacity-90">{t.contactNumber} *</label>
+                    <input 
+                      type="tel"
+                      value={contactNumber}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                        setContactNumber(value);
+                        if (errors.contactNumber) {
+                          setErrors({...errors, contactNumber: ''});
+                        }
+                      }}
+                      onKeyPress={(e) => {
+                        if (!/[0-9+\s]/.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+                      className={`mt-2 w-full rounded-xl bg-white/10 border px-3 py-2 outline-none focus:ring-2 focus:ring-white/30 ${
+                        errors.contactNumber ? 'border-red-400' : 'border-white/20'
+                      }`} 
+                      placeholder={t.enterNumber} 
+                      required
+                    />
+                    {errors.contactNumber && (
+                      <p className="mt-1 text-xs text-red-400">{errors.contactNumber}</p>
+                    )}
                   </div>
                   <div className="col-span-1">
-                    <label className="text-sm opacity-90">Whatsapp Number</label>
-                    <input className="mt-2 w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" placeholder="Enter whatsapp" />
+                    <label className="text-sm opacity-90">{t.whatsappNumber} *</label>
+                    <input 
+                      type="tel"
+                      value={whatsappNumber}
+                      onChange={(e) => {
+                        const value = e.target.value.replace(/\D/g, ''); // Remove non-digits
+                        setWhatsappNumber(value);
+                        if (errors.whatsappNumber) {
+                          setErrors({...errors, whatsappNumber: ''});
+                        }
+                      }}
+                      onKeyPress={(e) => {
+                        if (!/[0-9+\s]/.test(e.key)) {
+                          e.preventDefault();
+                        }
+                      }}
+                      className={`mt-2 w-full rounded-xl bg-white/10 border px-3 py-2 outline-none focus:ring-2 focus:ring-white/30 ${
+                        errors.whatsappNumber ? 'border-red-400' : 'border-white/20'
+                      }`} 
+                      placeholder={t.enterWhatsapp} 
+                    />
+                    {errors.whatsappNumber && (
+                      <p className="mt-1 text-xs text-red-400">{errors.whatsappNumber}</p>
+                    )}
                   </div>
                   <div className="col-span-1">
-                    <label className="text-sm opacity-90">Email Address</label>
-                    <input type="email" className="mt-2 w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" placeholder="you@example.com" />
+                    <label className="text-sm opacity-90">{t.emailAddress} *</label>
+                    <input 
+                      type="email"
+                      value={email}
+                      onChange={(e) => {
+                        setEmail(e.target.value);
+                        if (errors.email) {
+                          setErrors({...errors, email: ''});
+                        }
+                      }}
+                      className={`mt-2 w-full rounded-xl bg-white/10 border px-3 py-2 outline-none focus:ring-2 focus:ring-white/30 ${
+                        errors.email ? 'border-red-400' : 'border-white/20'
+                      }`} 
+                      placeholder={t.youExampleCom} 
+                      required
+                    />
+                    {errors.email && (
+                      <p className="mt-1 text-xs text-red-400">{errors.email}</p>
+                    )}
                   </div>
                   <div className="col-span-1">
-                    <label className="text-sm opacity-90">Preferred mode of communication</label>
+                    <label className="text-sm opacity-90">{t.preferredModeOfCommunication} *</label>
                     <select className="mt-2 w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30 text-white/90">
-                      <option className="bg-[#1f1f1f]">Whatsapp</option>
-                      <option className="bg-[#1f1f1f]">Facetime</option>
-                      <option className="bg-[#1f1f1f]">Call</option>
-                      <option className="bg-[#1f1f1f]">Email</option>
+                      <option className="bg-[#1f1f1f]">{t.whatsapp}</option>
+                      <option className="bg-[#1f1f1f]">{t.facetime}</option>
+                      <option className="bg-[#1f1f1f]">{t.call}</option>
+                      <option className="bg-[#1f1f1f]">{t.email}</option>
                     </select>
                   </div>
 
@@ -661,11 +798,18 @@ export default function Personal() {
                       onClick={() => { setIsDetailsOpen(false); setIsOptionsOpen(true); }}
                       className="group relative overflow-hidden px-8 py-2 rounded-full bg-gradient-to-r from-white/20 to-white/30 text-white font-semibold shadow-lg transition-all duration-300 hover:scale-105"
                     >
-                      <span className="relative z-10">Back</span>
+                      <span className="relative z-10">{t.back}</span>
                       <span className="pointer-events-none absolute top-0 left-[-60%] h-full w-10 bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-[-20deg] opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out group-hover:left-[160%]" />
                     </button>
-                    <button onClick={() => setDetailsStep(2)} className="group relative overflow-hidden px-10 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-600 text-white font-semibold shadow-lg hover:scale-105 transition">
-                      <span className="relative z-10">Continue</span>
+                    <button 
+                      onClick={() => {
+                        if (validateContactDetails()) {
+                          setDetailsStep(2);
+                        }
+                      }} 
+                      className="group relative overflow-hidden px-10 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-600 text-white font-semibold shadow-lg hover:scale-105 transition"
+                    >
+                      <span className="relative z-10">{t.continue}</span>
                       <span className="pointer-events-none absolute top-0 left-[-60%] h-full w-12 bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-[-20deg] opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out group-hover:left-[160%]" />
                     </button>
                   </div>
@@ -673,25 +817,25 @@ export default function Personal() {
               ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="col-span-1 md:col-span-2">
-                    <label className="text-sm opacity-90">Mode of contact</label>
+                    <label className="text-sm opacity-90">{t.modeOfContact} *</label>
                     <div className="mt-2 flex flex-wrap gap-4 text-sm">
-                      <label className="flex items-center gap-2"><input type="checkbox" defaultChecked/> Audio Call</label>
-                      <label className="flex items-center gap-2"><input type="checkbox"/> Video Call</label>
-                      <label className="flex items-center gap-2"><input type="checkbox"/> Live Text</label>
+                      <label className="flex items-center gap-2"><input type="checkbox" defaultChecked/> {t.audioCall}</label>
+                      <label className="flex items-center gap-2"><input type="checkbox"/> {t.videoCall}</label>
+                      <label className="flex items-center gap-2"><input type="checkbox"/> {t.liveText}</label>
                     </div>
                   </div>
                   <div className="col-span-1">
-                    <label className="text-sm opacity-90">Type of travel</label>
+                    <label className="text-sm opacity-90">{t.typeOfTravel} *</label>
                     <select className="mt-2 w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30 text-white/90">
-                      <option className="bg-[#1f1f1f]">Friends</option>
-                      <option className="bg-[#1f1f1f]">Family</option>
-                      <option className="bg-[#1f1f1f]">Couple</option>
-                      <option className="bg-[#1f1f1f]">On your own</option>
-                      <option className="bg-[#1f1f1f]">Other</option>
+                      <option className="bg-[#1f1f1f]">{t.friends}</option>
+                      <option className="bg-[#1f1f1f]">{t.family}</option>
+                      <option className="bg-[#1f1f1f]">{t.couple}</option>
+                      <option className="bg-[#1f1f1f]">{t.onYourOwn}</option>
+                      <option className="bg-[#1f1f1f]">{t.other}</option>
                     </select>
                   </div>
                   <div className="col-span-1 md:col-span-2">
-                    <label className="text-sm opacity-90">If other, please specify</label>
+                    <label className="text-sm opacity-90">{t.ifOtherPleaseSpecify}</label>
                     <textarea rows={3} className="mt-2 w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" />
                   </div>
 
@@ -700,11 +844,11 @@ export default function Personal() {
                       onClick={() => setDetailsStep(1)}
                       className="group relative overflow-hidden px-8 py-2 rounded-full bg-gradient-to-r from-white/20 to-white/30 text-white font-semibold shadow-lg transition-all duration-300 hover:scale-105"
                     >
-                      <span className="relative z-10">Back</span>
+                      <span className="relative z-10">{t.back}</span>
                       <span className="pointer-events-none absolute top-0 left-[-60%] h-full w-10 bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-[-20deg] opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out group-hover:left-[160%]" />
                     </button>
                     <button onClick={() => { setIsDetailsOpen(false); setImageStep(1); setIsImageFlowOpen(true); }} className="group relative overflow-hidden px-10 py-2 rounded-full bg-gradient-to-r from-purple-500 to-pink-600 text-white font-semibold shadow-lg hover:scale-105 transition">
-                      <span className="relative z-10">Continue</span>
+                      <span className="relative z-10">{t.continue}</span>
                       <span className="pointer-events-none absolute top-0 left-[-60%] h-full w-12 bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-[-20deg] opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out group-hover:left-[160%]" />
                     </button>
                   </div>
@@ -738,8 +882,8 @@ export default function Personal() {
 
             {/* Close Button */}
             <button
-              aria-label="Close"
-              title="Close"
+              aria-label={t.close}
+              title={t.close}
               onClick={() => setIsImageFlowOpen(false)}
               className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 group z-50"
             >
@@ -753,66 +897,75 @@ export default function Personal() {
             <div className="p-6 md:p-8 text-white/95">
               {imageStep === 1 && (
                 <div className="max-w-xl mx-auto">
-                  <p className="text-sm md:text-base mb-4 opacity-90">We’re delighted you’ve chosen to work with our Rome expert to design your personalized travel experience. Kindly select a time for your private consultation so we may begin crafting the finer details of your itinerary.</p>
+                  <p className="text-sm md:text-base mb-4 opacity-90">{t.consultationText}</p>
                   <div className="space-y-4">
                     <div>
-                      <label className="text-sm opacity-90">Select call date</label>
+                      <label className="text-sm opacity-90">{t.selectCallDate} *</label>
                       <ModernDatePicker
                         selected={callDate ? new Date(callDate) : null}
-                        onSelect={(date) => setCallDate(date.toISOString().slice(0, 10))}
-                        placeholder="Select a date"
+                        onSelect={(date) => {
+                          setCallDate(date.toISOString().slice(0, 10));
+                          if (errors.callDate) {
+                            setErrors({...errors, callDate: ''});
+                          }
+                        }}
+                        placeholder={t.selectADate}
                       />
+                      {errors.callDate && (
+                        <p className="mt-1 text-xs text-red-400">{errors.callDate}</p>
+                      )}
                     </div>
                     <div>
-                      <label className="text-sm opacity-90">Select call time</label>
+                      <label className="text-sm opacity-90">{t.selectCallTime} *</label>
                       <ModernTimePicker
                         selected={callTime}
-                        onSelect={setCallTime}
-                        placeholder="Select a time"
+                        onSelect={(time) => {
+                          setCallTime(time);
+                          if (errors.callTime) {
+                            setErrors({...errors, callTime: ''});
+                          }
+                        }}
+                        placeholder={t.selectATime}
                         interval={30}
                         startHour={9}
                         endHour={18}
                       />
+                      {errors.callTime && (
+                        <p className="mt-1 text-xs text-red-400">{errors.callTime}</p>
+                      )}
                     </div>
-                    <div className="text-xs px-3 py-2 rounded-lg bg-white/10 border border-white/20 inline-block opacity-90">The schedule is displayed in Rome's local time (CET)</div>
+                    <div className="text-xs px-3 py-2 rounded-lg bg-white/10 border border-white/20 inline-block opacity-90">{t.scheduleDisplay}</div>
                   </div>
                 </div>
               )}
               {imageStep === 2 && (
                 <div className="max-w-xl mx-auto">
                   <div className="mb-4 rounded-xl bg-pink-300/60 text-white px-4 py-3 text-sm">
-                    A €100 non-refundable consultation retainer is required to reserve your private session with our expert curator. This amount will be deducted from your final payment for the bespoke itinerary should you choose to proceed.
+                    {t.consultationRetainer}
                   </div>
                   <div className="space-y-4">
-                    <div>
-                      <label className="text-sm opacity-90">Card Number</label>
-                      <input inputMode="numeric" placeholder="1234 5678 9012 3456" value={cardNumber} onChange={(e)=>setCardNumber(e.target.value)} className="mt-2 w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" />
-                    </div>
                     <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <label className="text-sm opacity-90">Expiry Date</label>
-                        <input placeholder="MM/YY" value={expiry} onChange={(e)=>setExpiry(e.target.value)} className="mt-2 w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" />
-                      </div>
-                      <div>
-                        <label className="text-sm opacity-90">CVV</label>
-                        <input inputMode="numeric" placeholder="123" value={cvv} onChange={(e)=>setCvv(e.target.value)} className="mt-2 w-full rounded-xl bg-white/10 border border-white/20 px-3 py-2 outline-none focus:ring-2 focus:ring-white/30" />
-                      </div>
                     </div>
-                    <div className="text-center text-2xl font-semibold mt-2">Total: €100</div>
+                    <div className="text-center text-2xl font-semibold mt-2">{t.total}: €100</div>
 
                     {/* Terms & Conditions Checkbox */}
                     <div className="flex items-start gap-3 text-white/80 text-sm pt-4 bg-white/5 p-4 rounded-lg border border-white/10 hover:border-white/20 transition-colors mt-4">
                       <input
                         type="checkbox"
                         checked={acceptTerms}
-                        onChange={(e) => setAcceptTerms(e.target.checked)}
+                        onChange={(e) => {
+                          setAcceptTerms(e.target.checked);
+                          if (e.target.checked) {
+                            handlePayment();
+                          }
+                        }}
                         className="accent-pink-400 flex-shrink-0 w-4 h-4 mt-0.5 cursor-pointer"
                       />
                       <label className="cursor-pointer">
-                        I accept the{" "}
-                        <a href="/terms-and-conditions" className="text-pink-300 hover:text-pink-200 underline font-medium">
-                          Terms and Conditions
-                        </a>
+                        {t.acceptTerms}{" "}
+                        <Link to="/terms-and-conditions" className="text-pink-300 hover:text-pink-200 underline font-medium">
+                          {t.termsAndConditions}
+                        </Link>
                       </label>
                     </div>
                   </div>
@@ -820,53 +973,81 @@ export default function Personal() {
               )}
               {imageStep === 3 && (
                 <div className="max-w-2xl mx-auto text-center">
-                  <p className="text-xl md:text-2xl leading-relaxed">Congratulation, our expert curator will contact you as per the schedule chosen by you. Sit back and enjoy the experience</p>
+                  <p className="text-xl md:text-2xl leading-relaxed">{t.congratulations}</p>
+                  <div className="mt-8 flex items-center justify-center gap-3">
+                    <button
+                      onClick={() => setImageStep(2)}
+                      className="group relative overflow-hidden px-8 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-white/20 to-white/30 shadow-lg transition-all duration-300 hover:scale-105"
+                    >
+                      <span className="relative z-10 flex items-center gap-2">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                        {t.back}
+                      </span>
+                      <span className="pointer-events-none absolute top-0 left-[-60%] h-full w-12 bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-[-20deg] opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out group-hover:left-[160%]" />
+                    </button>
+                  </div>
                 </div>
               )}
             </div>
 
             {/*{/* Actions */}
             <div className="px-6 pb-6 pt-4 flex items-center justify-center gap-3">
-              {imageStep > 1 && imageStep < 3 && (
+              {imageStep > 1 && (
                 <button
                   onClick={() => setImageStep((s) => Math.max(1, s - 1))}
                   className="group relative overflow-hidden px-8 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-white/20 to-white/30 shadow-lg transition-all duration-300 hover:scale-105"
                 >
-                  <span className="relative z-10">Back</span>
+                  <span className="relative z-10 flex items-center gap-2">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                    </svg>
+                    {t.back}
+                  </span>
                   <span className="pointer-events-none absolute top-0 left-[-60%] h-full w-12 bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-[-20deg] opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out group-hover:left-[160%]" />
                 </button>
               )}
 
               {imageStep < 3 ? (
-                <button
-                  onClick={async () => {
-                    if (imageStep === 1) {
-                      if (!callDate || !callTime) return;
-                      setImageStep(2);
-                    } else if (imageStep === 2) {
-                      if (!cardNumber || !expiry || !cvv) {
-                        alert('❌ Please fill in all card details');
-                        return;
+                <>
+                  {imageStep === 1 && (
+                    <button
+                      onClick={() => { setIsImageFlowOpen(false); setIsDetailsOpen(true); }}
+                      className="group relative overflow-hidden px-8 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-white/20 to-white/30 shadow-lg transition-all duration-300 hover:scale-105"
+                    >
+                      <span className="relative z-10 flex items-center gap-2">
+                        <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                          <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 19l-7-7 7-7" />
+                        </svg>
+                        {t.back}
+                      </span>
+                      <span className="pointer-events-none absolute top-0 left-[-60%] h-full w-12 bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-[-20deg] opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out group-hover:left-[160%]" />
+                    </button>
+                  )}
+                  <button
+                    onClick={async () => {
+                      if (imageStep === 1) {
+                        if (validateDateTime()) {
+                          setImageStep(2);
+                        }
                       }
-                      if (!acceptTerms) {
-                        alert('❌ Please accept the Terms and Conditions to proceed');
-                        return;
-                      }
-                      handlePayment();
-                    }
-                  }}
-                  className={`group relative overflow-hidden px-10 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-purple-500 to-pink-600 shadow-lg shadow-purple-600/30 transition-all duration-300 hover:scale-105 hover:shadow-pink-500/40 ${imageStep===1 && (!callDate||!callTime) ? 'opacity-60 cursor-not-allowed' : ''} ${imageStep===2 && (!cardNumber||!expiry||!cvv||!acceptTerms) ? 'opacity-60 cursor-not-allowed' : ''}`}
-                  disabled={(imageStep===1 && (!callDate||!callTime)) || (imageStep===2 && (!cardNumber||!expiry||!cvv||!acceptTerms))}
-                >
-                  <span className="relative z-10">{imageStep === 2 ? 'Pay with PayPal - €100' : 'Continue'}</span>
-                  <span className="pointer-events-none absolute top-0 left-[-60%] h-full w-12 bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-[-20deg] opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out group-hover:left-[160%]" />
-                </button>
+                    }}
+                    className={`group relative overflow-hidden px-10 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-purple-500 to-pink-600 shadow-lg shadow-purple-600/30 transition-all duration-300 hover:scale-105 hover:shadow-pink-500/40 ${
+                      (errors.callDate || errors.callTime) ? 'opacity-60 cursor-not-allowed' : ''
+                    }`}
+                    disabled={!!(errors.callDate || errors.callTime)}
+                  >
+                    <span className="relative z-10">{t.continue}</span>
+                    <span className="pointer-events-none absolute top-0 left-[-60%] h-full w-12 bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-[-20deg] opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out group-hover:left-[160%]" />
+                  </button>
+                </>
               ) : (
                 <button
                   onClick={() => { setIsImageFlowOpen(false); navigate('/'); }}
                   className="group relative overflow-hidden px-10 py-3 rounded-full font-semibold text-white bg-gradient-to-r from-purple-500 to-pink-600 shadow-lg shadow-purple-600/30 transition-all duration-300 hover:scale-105 hover:shadow-pink-500/40"
                 >
-                  <span className="relative z-10">Back to home</span>
+                  <span className="relative z-10">{t.backToHome}</span>
                   <span className="pointer-events-none absolute top-0 left-[-60%] h-full w-12 bg-gradient-to-r from-transparent via-white/25 to-transparent skew-x-[-20deg] opacity-0 group-hover:opacity-100 transition-all duration-700 ease-out group-hover:left-[160%]" />
                 </button>
               )}

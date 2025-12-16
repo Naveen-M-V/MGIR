@@ -76,6 +76,8 @@ function BabysittingFormModal({ isOpen, onClose, onPaymentClick, t }) {
   const [animateIn, setAnimateIn] = useState(false);
 
   const [numDays, setNumDays] = useState("");
+  const [numHours, setNumHours] = useState("");
+  const [pricingType, setPricingType] = useState("daily"); // "daily" or "hourly"
   const [numChildren, setNumChildren] = useState("");
   const [childAges, setChildAges] = useState([]);
   const [childNames, setChildNames] = useState([]);
@@ -98,6 +100,23 @@ function BabysittingFormModal({ isOpen, onClose, onPaymentClick, t }) {
     setChildNames(Array(count).fill(""));
   }, [numChildren]);
 
+  // Calculate end time based on start time and hours
+  useEffect(() => {
+    if (pricingType === "hourly" && startTime && numHours) {
+      const [startHour, startMinute] = startTime.split(':').map(Number);
+      const totalMinutes = startHour * 60 + startMinute + (parseInt(numHours) * 60);
+      const endHour = Math.floor(totalMinutes / 60) % 24;
+      const endMinute = totalMinutes % 60;
+      const formattedEndTime = `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
+      setEndTime(formattedEndTime);
+      
+      // If same day service, set end date to start date
+      if (startDate) {
+        setEndDate(startDate);
+      }
+    }
+  }, [pricingType, startTime, numHours, startDate]);
+
   const handleAgeChange = (index, value) => {
     const newAges = [...childAges];
     newAges[index] = value;
@@ -116,7 +135,9 @@ function BabysittingFormModal({ isOpen, onClose, onPaymentClick, t }) {
   const allAgesSelected = childAges.length > 0 && childAges.every(age => age !== "");
   const allNamesEntered = childNames.length > 0 && childNames.every(name => name.trim() !== "");
   const formValid =
-    numDays && numChildren && allAgesSelected && allNamesEntered && healthDeclarationConfirmed && startDate && startTime && endDate && endTime && acceptTerms;
+    (pricingType === "daily" ? numDays : numHours) && 
+    numChildren && allAgesSelected && allNamesEntered && healthDeclarationConfirmed && 
+    startDate && startTime && endDate && endTime && acceptTerms;
 
   return (
   <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 hide-scrollbar">
@@ -180,6 +201,63 @@ function BabysittingFormModal({ isOpen, onClose, onPaymentClick, t }) {
                   placeholder={t?.enterTheNumberOfChildren || "Enter the number of children"}
                 />
               </div>
+
+              {/* Pricing Type Selection */}
+              <div>
+                <label className="block mb-1 text-sm font-medium">{t?.selectPricingType || "Select Pricing Type"}</label>
+                <div className="flex gap-4">
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="pricingType"
+                      value="daily"
+                      checked={pricingType === "daily"}
+                      onChange={(e) => setPricingType(e.target.value)}
+                      className="mr-2 accent-pink-400"
+                    />
+                    <span className="text-white/90">{t?.daily || "Daily"} (€150/day)</span>
+                  </label>
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="pricingType"
+                      value="hourly"
+                      checked={pricingType === "hourly"}
+                      onChange={(e) => setPricingType(e.target.value)}
+                      className="mr-2 accent-pink-400"
+                    />
+                    <span className="text-white/90">{t?.hourly || "Hourly"}</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Days or Hours Input */}
+              {pricingType === "daily" ? (
+                <div>
+                  <label className="block mb-1 text-sm font-medium">{t?.numberOfDays || "Number of Days"}</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={numDays}
+                    onChange={(e) => setNumDays(e.target.value)}
+                    className="w-full border border-white/20 rounded-lg py-2 px-3 bg-white/10 text-white placeholder-white/50 focus:border-pink-400"
+                    placeholder={t?.enterTheNumberOfDays || "Enter the number of days"}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <label className="block mb-1 text-sm font-medium">{t?.numberOfHours || "Number of Hours"}</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="12"
+                    value={numHours}
+                    onChange={(e) => setNumHours(e.target.value)}
+                    className="w-full border border-white/20 rounded-lg py-2 px-3 bg-white/10 text-white placeholder-white/50 focus:border-pink-400"
+                    placeholder={t?.enterTheNumberOfHours || "Enter the number of hours"}
+                  />
+                </div>
+              )}
               
               {/* Children Details */}
               {numChildren && parseInt(numChildren) > 0 && (
@@ -266,9 +344,9 @@ function BabysittingFormModal({ isOpen, onClose, onPaymentClick, t }) {
                 />
                 <label className="cursor-pointer">
                   I accept the{" "}
-                  <a href="/terms-and-conditions" className="text-pink-300 hover:text-pink-200 underline font-medium">
+                  <Link to="/terms-and-conditions" className="text-pink-300 hover:text-pink-200 underline font-medium">
                     {t.termsAndConditions}
-                  </a>
+                  </Link>
                 </label>
               </div>
               
@@ -309,17 +387,18 @@ function BabysittingFormModal({ isOpen, onClose, onPaymentClick, t }) {
                   onClick={async () => {
                     if (formValid) {
                       try {
-                        const totalPrice = numDays * 50;
+                        const totalPrice = pricingType === "daily" ? numDays * 150 : numHours * 25; // €150/day or €25/hour
                         const orderResponse = await paymentService.createOrder({
                           amount: totalPrice,
                           currency: 'EUR',
-                          description: `Babysitting Service - ${numDays} day(s), ${numChildren} child(ren)`,
+                          description: `Babysitting Service - ${pricingType === "daily" ? numDays + " day(s)" : numHours + " hour(s)"}, ${numChildren} child(ren)`,
                           serviceType: 'babysitting',
                           customerName: 'Guest',
                           customerEmail: 'guest@example.com',
                           customerPhone: '0000000000',
                           bookingDetails: {
-                            days: numDays,
+                            pricingType,
+                            [pricingType === "daily" ? "days" : "hours"]: pricingType === "daily" ? numDays : numHours,
                             children: numChildren,
                             childDetails: childAges.map((age, index) => ({
                               name: childNames[index],
@@ -352,7 +431,7 @@ function BabysittingFormModal({ isOpen, onClose, onPaymentClick, t }) {
                   {formValid && (
                       null
                   )}
-                  {formValid ? `Pay with PayPal - €${numDays * 50}` : t?.completeFormToContinue || 'Complete form to continue'}
+                  {formValid ? `Pay with PayPal - €${pricingType === "daily" ? numDays * 150 : numHours * 25}` : t?.completeFormToContinue || 'Complete form to continue'}
                 </button>
                 
                 {formValid && (
@@ -391,6 +470,8 @@ function PetSittingFormModal({ isOpen, onClose, t }) {
   const [animateIn, setAnimateIn] = useState(false);
 
   const [numDays, setNumDays] = useState("");
+  const [numHours, setNumHours] = useState("");
+  const [pricingType, setPricingType] = useState("daily"); // "daily" or "hourly"
   const [numPets, setNumPets] = useState("");
   const [petNames, setPetNames] = useState([]);
   const [petTypes, setPetTypes] = useState([]);
@@ -414,6 +495,23 @@ function PetSittingFormModal({ isOpen, onClose, t }) {
     setPetTypes(Array(count).fill(""));
     setPetBreeds(Array(count).fill(""));
   }, [numPets]);
+
+  // Calculate end time based on start time and hours
+  useEffect(() => {
+    if (pricingType === "hourly" && startTime && numHours) {
+      const [startHour, startMinute] = startTime.split(':').map(Number);
+      const totalMinutes = startHour * 60 + startMinute + (parseInt(numHours) * 60);
+      const endHour = Math.floor(totalMinutes / 60) % 24;
+      const endMinute = totalMinutes % 60;
+      const formattedEndTime = `${endHour.toString().padStart(2, '0')}:${endMinute.toString().padStart(2, '0')}`;
+      setEndTime(formattedEndTime);
+      
+      // If same day service, set end date to start date
+      if (startDate) {
+        setEndDate(startDate);
+      }
+    }
+  }, [pricingType, startTime, numHours, startDate]);
 
   const handlePetNameChange = (index, value) => {
     const newNames = [...petNames];
@@ -439,7 +537,9 @@ function PetSittingFormModal({ isOpen, onClose, t }) {
   const allPetTypesEntered = petTypes.length > 0 && petTypes.every(type => type.trim() !== "");
   const allPetBreedsEntered = petBreeds.length > 0 && petBreeds.every(breed => breed.trim() !== "");
   const formValid =
-    numDays && numPets && allPetNamesEntered && allPetTypesEntered && allPetBreedsEntered && vaccinationConfirmed && startDate && startTime && endDate && endTime && acceptTerms;
+    (pricingType === "daily" ? numDays : numHours) && 
+    numPets && allPetNamesEntered && allPetTypesEntered && allPetBreedsEntered && vaccinationConfirmed && 
+    startDate && startTime && endDate && endTime && acceptTerms;
 
   return (
     <div className="fixed inset-0 bg-black/60 backdrop-blur-sm flex items-center justify-center z-50 p-4 hide-scrollbar">
@@ -481,17 +581,6 @@ function PetSittingFormModal({ isOpen, onClose, t }) {
             {/* Form */}
             <form className="space-y-4 text-white">
               <div>
-                <label className="block mb-1 text-sm font-medium">{t?.numberOfDays || "Number of Days"}</label>
-                <input
-                  type="number"
-                  min="1"
-                  value={numDays}
-                  onChange={(e) => setNumDays(e.target.value)}
-                  className="w-full border border-white/20 rounded-lg py-2 px-3 bg-white/10 text-white placeholder-white/50 focus:border-green-400"
-                  placeholder={t?.enterTheNumberOfDays || "Enter the number of days"}
-                />
-              </div>
-              <div>
                 <label className="block mb-1 text-sm font-medium">{t?.numberOfPets || "Number of Pets"}</label>
                 <input
                   type="number"
@@ -502,6 +591,63 @@ function PetSittingFormModal({ isOpen, onClose, t }) {
                   placeholder={t?.enterTheNumberOfPets || "Enter the number of pets"}
                 />
               </div>
+
+              {/* Pricing Type Selection */}
+              <div>
+                <label className="block mb-1 text-sm font-medium">{t?.selectPricingType || "Select Pricing Type"}</label>
+                <div className="flex gap-4">
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="pricingType"
+                      value="daily"
+                      checked={pricingType === "daily"}
+                      onChange={(e) => setPricingType(e.target.value)}
+                      className="mr-2 accent-green-400"
+                    />
+                    <span className="text-white/90">{t?.daily || "Daily"} (€100/day)</span>
+                  </label>
+                  <label className="flex items-center cursor-pointer">
+                    <input
+                      type="radio"
+                      name="pricingType"
+                      value="hourly"
+                      checked={pricingType === "hourly"}
+                      onChange={(e) => setPricingType(e.target.value)}
+                      className="mr-2 accent-green-400"
+                    />
+                    <span className="text-white/90">{t?.hourly || "Hourly"}</span>
+                  </label>
+                </div>
+              </div>
+
+              {/* Days or Hours Input */}
+              {pricingType === "daily" ? (
+                <div>
+                  <label className="block mb-1 text-sm font-medium">{t?.numberOfDays || "Number of Days"}</label>
+                  <input
+                    type="number"
+                    min="1"
+                    value={numDays}
+                    onChange={(e) => setNumDays(e.target.value)}
+                    className="w-full border border-white/20 rounded-lg py-2 px-3 bg-white/10 text-white placeholder-white/50 focus:border-green-400"
+                    placeholder={t?.enterTheNumberOfDays || "Enter the number of days"}
+                  />
+                </div>
+              ) : (
+                <div>
+                  <label className="block mb-1 text-sm font-medium">{t?.numberOfHours || "Number of Hours"}</label>
+                  <input
+                    type="number"
+                    min="1"
+                    max="12"
+                    value={numHours}
+                    onChange={(e) => setNumHours(e.target.value)}
+                    className="w-full border border-white/20 rounded-lg py-2 px-3 bg-white/10 text-white placeholder-white/50 focus:border-green-400"
+                    placeholder={t?.enterTheNumberOfHours || "Enter the number of hours"}
+                  />
+                </div>
+              )}
               
               {/* Pet Details */}
               {numPets && parseInt(numPets) > 0 && (
@@ -616,9 +762,9 @@ function PetSittingFormModal({ isOpen, onClose, t }) {
                 />
                 <label className="cursor-pointer">
                   I accept the{" "}
-                  <a href="/terms-and-conditions" className="text-green-300 hover:text-green-200 underline font-medium">
+                  <Link to="/terms-and-conditions" className="text-green-300 hover:text-green-200 underline font-medium">
                     {t.termsAndConditions}
-                  </a>
+                  </Link>
                 </label>
               </div>
 
@@ -635,17 +781,18 @@ function PetSittingFormModal({ isOpen, onClose, t }) {
                   onClick={async () => {
                     if (formValid) {
                       try {
-                        const totalPrice = numDays * 40;
+                        const totalPrice = pricingType === "daily" ? numDays * 100 : numHours * 20; // €100/day or €20/hour
                         const orderResponse = await paymentService.createOrder({
                           amount: totalPrice,
                           currency: 'EUR',
-                          description: `Pet Sitting Service - ${numDays} day(s), ${numPets} pet(s)`,
+                          description: `Pet Sitting Service - ${pricingType === "daily" ? numDays + " day(s)" : numHours + " hour(s)"}, ${numPets} pet(s)`,
                           serviceType: 'pet_sitting',
                           customerName: 'Guest',
                           customerEmail: 'guest@example.com',
                           customerPhone: '0000000000',
                           bookingDetails: {
-                            days: numDays,
+                            pricingType,
+                            [pricingType === "daily" ? "days" : "hours"]: pricingType === "daily" ? numDays : numHours,
                             pets: numPets,
                             petDetails: petNames.map((name, index) => ({
                               name: name,
@@ -679,7 +826,7 @@ function PetSittingFormModal({ isOpen, onClose, t }) {
                   {formValid && (
                       null
                   )}
-                  {formValid ? `Pay with PayPal - €${numDays * 40}` : t?.completeFormToContinue || 'Complete form to continue'}
+                  {formValid ? `Pay with PayPal - €${pricingType === "daily" ? numDays * 100 : numHours * 20}` : t?.completeFormToContinue || 'Complete form to continue'}
                 </button>
                 
                 {formValid && (
@@ -800,7 +947,7 @@ export default function Sitting() {
             </div>
 
             {/* Main Title */}
-            <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-green-200 via-emerald-300 to-amber-400 bg-clip-text text-transparent drop-shadow-2xl">
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-green-200 via-emerald-300 to-amber-400 bg-clip-text text-transparent drop-shadow-2xl font-futura">
               {t.sittingServicesTitle}
             </h1>
             
@@ -829,7 +976,7 @@ export default function Sitting() {
         <section className=" px-8">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 font-futura">
                 {t.chooseYourCareService}
               </h2>
               <div className="w-24 h-1 bg-gradient-to-r from-green-400 to-emerald-500 mx-auto mb-6 rounded-full" />
@@ -858,7 +1005,7 @@ export default function Sitting() {
          {/* Call to Action */}
                 <section className="py-20 px-8">
                   <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
+                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 font-futura">
                       {t.discoverRoman || "Discover Rome like a local"}
                     </h2>
                     <p className="text-xl text-white/70 mb-12 max-w-2xl mx-auto">

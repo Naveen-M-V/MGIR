@@ -4,17 +4,26 @@ import Footer from "../../components/Footer";
 import FullscreenMenu from "../FullscreenMenu";
 import TopNav from "../../components/TopNav";
 import BackButton from "../../components/BackButton";
+import AuthModal from "../../components/AuthModal";
+import WishlistButton from "../../components/WishlistButton";
 import paymentService from "../../services/paymentService";
 import { ModernDatePicker } from "../../components/ModernDatePicker";
 import { LanguageContext } from "../../context/LanguageContext";
+import { useAuth } from "../../context/AuthContext";
+import { useTranslation } from "../../hooks/useTranslation";
 import personalCompanionTranslations from "../../locales/personalCompanionTranslations";
 
 // Booking Modal Component
 function BookingModal({ isOpen, onClose, carOption }) {
   const { language } = useContext(LanguageContext);
+  const { isAuthenticated, loading: authLoading } = useAuth();
+  const { t: uiT } = useTranslation();
   const langMap = { 'EN': 'en', 'ES': 'es', 'RU': 'ru' };
   const currentLang = langMap[language] || 'en';
   const t = personalCompanionTranslations[currentLang];
+
+  const [isAuthModalOpen, setAuthModalOpen] = useState(false);
+  const [authMode, setAuthMode] = useState('login');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -25,6 +34,16 @@ function BookingModal({ isOpen, onClose, carOption }) {
     acceptTerms: false
   });
   const [animateIn, setAnimateIn] = useState(false);
+
+  const openLogin = () => {
+    setAuthMode('login');
+    setAuthModalOpen(true);
+  };
+
+  const wishlistItem = {
+    title: `${t.mainTitle} - ${carOption === 'withCar' ? t.withCar : t.withoutCar}`,
+    type: 'service',
+  };
 
   // Pricing based on car option and days (constant regardless of member count)
   const pricing = {
@@ -118,6 +137,16 @@ function BookingModal({ isOpen, onClose, carOption }) {
         animateIn ? 'scale-100 opacity-100' : 'scale-95 opacity-0'
       }`}>
         <div className="relative bg-white/10 backdrop-blur-2xl border border-white/20 rounded-3xl shadow-2xl overflow-hidden">
+          <div className="absolute top-4 left-4 flex items-center gap-2 z-50">
+            <WishlistButton
+              item={wishlistItem}
+              size="sm"
+              variant="card"
+              showText={false}
+              onLoginRequired={openLogin}
+            />
+          </div>
+
           {/* Close Button */}
           <button
             aria-label="Close"
@@ -152,7 +181,7 @@ function BookingModal({ isOpen, onClose, carOption }) {
             <form onSubmit={handleSubmit} className="space-y-3">
               {/* Name Field */}
               <div>
-                <label className="block text-white/90 text-sm font-medium mb-2">{t.fullName}</label>
+                <label className="block text-white/90 text-sm font-medium mb-2">{t.fullName} *</label>
                 <input
                   type="text"
                   name="name"
@@ -166,7 +195,7 @@ function BookingModal({ isOpen, onClose, carOption }) {
 
               {/* Days Dropdown */}
               <div>
-                <label className="block text-white/90 text-sm font-medium mb-2">{t.numberOfDays}</label>
+                <label className="block text-white/90 text-sm font-medium mb-2">{t.numberOfDays} *</label>
                 <select
                   name="days"
                   value={formData.days}
@@ -183,7 +212,7 @@ function BookingModal({ isOpen, onClose, carOption }) {
               {/* Members Field */}
               <div>
                 <label className="block text-white/90 text-sm font-medium mb-2">
-                  {t.numberOfMembers}
+                  {t.numberOfMembers} *
                   {carOption === 'withCar' && (
                     <span className="text-amber-400 text-xs ml-2">{t.maxMembers}</span>
                   )}
@@ -216,7 +245,7 @@ function BookingModal({ isOpen, onClose, carOption }) {
 
               {/* Contact Number */}
               <div>
-                <label className="block text-white/90 text-sm font-medium mb-2">{t.contactNumber}</label>
+                <label className="block text-white/90 text-sm font-medium mb-2">{t.contactNumber} *</label>
                 <input
                   type="tel"
                   name="contact"
@@ -230,7 +259,7 @@ function BookingModal({ isOpen, onClose, carOption }) {
 
               {/* Date */}
               <div>
-                <label className="block text-white/90 text-sm font-medium mb-2">{t.preferredDate}</label>
+                <label className="block text-white/90 text-sm font-medium mb-2">{t.preferredDate} *</label>
                 <ModernDatePicker
                   selected={formData.date ? new Date(formData.date) : null}
                   onSelect={(date) => {
@@ -253,9 +282,9 @@ function BookingModal({ isOpen, onClose, carOption }) {
                 />
                 <label className="cursor-pointer">
                   {t.acceptTerms}{" "}
-                  <a href="/terms-and-conditions" className="text-emerald-300 hover:text-emerald-200 underline font-medium">
+                  <Link to="/terms-and-conditions" className="text-emerald-300 hover:text-emerald-200 underline font-medium">
                     {t.termsAndConditions}
-                  </a>
+                  </Link>
                 </label>
               </div>
 
@@ -272,10 +301,37 @@ function BookingModal({ isOpen, onClose, carOption }) {
                   {t.securePayment}
                 </p>
               </div>
+              
+              <button
+                type="button"
+                onClick={() => {
+                  if (!isAuthenticated) {
+                    openLogin();
+                  } else {
+                    // Handle wishlist add functionality
+                    const wishlistButton = document.querySelector('.wishlist-button-card');
+                    if (wishlistButton) {
+                      wishlistButton.click();
+                    }
+                  }
+                }}
+                className="w-full mt-3 px-6 py-2.5 border border-white/20 text-white font-semibold rounded-lg hover:bg-gradient-to-r hover:from-white/10 hover:to-white/5 transition-all duration-300 shadow-lg hover:shadow-white/10 hover:scale-105 flex items-center justify-center gap-3"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4.318 6.318a4.5 4.5 0 000 6.364L12 20.364l7.682-7.682a4.5 4.5 0 00-6.364-6.364L12 7.636l-1.318-1.318a4.5 4.5 0 00-6.364 0z" />
+                </svg>
+                {isAuthenticated ? t.addToWishlist : t.loginToAddWishlist}
+              </button>
             </form>
           </div>
         </div>
       </div>
+
+      <AuthModal
+        isOpen={isAuthModalOpen}
+        onClose={() => setAuthModalOpen(false)}
+        initialMode={authMode}
+      />
     </div>
   );
 }
@@ -334,7 +390,7 @@ export default function Personalized() {
             </div>  
 
             {/* Main Title */}
-            <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-emerald-200 via-teal-300 to-amber-400 bg-clip-text text-transparent drop-shadow-2xl">
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-emerald-200 via-teal-300 to-amber-400 bg-clip-text text-transparent drop-shadow-2xl font-futura">
               {t.mainTitle}
             </h1>
             
@@ -362,7 +418,7 @@ export default function Personalized() {
         <section className=" px-8">
           <div className="max-w-6xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 font-futura">
                 {t.chooseExperience}
               </h2>
               <div className="w-24 h-1 bg-gradient-to-r from-emerald-400 to-teal-500 mx-auto mb-6 rounded-full" />
@@ -474,7 +530,7 @@ export default function Personalized() {
         {/* Call to Action */}
         <section className="py-20 px-8">
           <div className="max-w-4xl mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
+            <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 font-futura">
               {t.discoverRome}
             </h2>
             <p className="text-xl text-white/70 mb-12 max-w-2xl mx-auto">

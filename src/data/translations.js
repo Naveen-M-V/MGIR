@@ -3,7 +3,7 @@ export const translations = {
     // Home Screen
     homeScreen: "Home Screen",
     experienceRomeAsLocal: "EXPERIENCE ROME AS A LOCAL",
-    ultimateRomanHoliday: "Your ultimate roman holiday starts here!",
+    ultimateRomanHoliday: "Your ultimate Roman holiday starts here!",
     getStarted: "Get Started",
     
     // Navigation & Auth
@@ -37,7 +37,7 @@ export const translations = {
     termsOfService: "Terms of Service",
     
     // About Page
-    aboutUs: "ABOUT US",
+    aboutUs: "About Us",
     aboutDescription: "Discover Rome with local expertise and personalized service",
     
     // Services Page
@@ -52,6 +52,7 @@ export const translations = {
     
     // Menu Items
     aboutUsMenu: "ABOUT US",
+    aboutUsSubmenu: "About Us",
     ourServicesMenu: "OUR SERVICES",
     personalCuratorMenu: "PERSONAL CURATOR",
     galleryMenu: "GALLERY",
@@ -64,6 +65,7 @@ export const translations = {
     beautyServicesSub: "Beauty Services",
     generalSub: "General",
     tourSub: "Tour",
+    beautySub: "Beauty",
     // Wishlist page specific
     myWishlist: "MY WISHLIST",
     yourSavedItems: "Your Saved Items",
@@ -143,6 +145,7 @@ export const translations = {
     
     // Menu Items
     aboutUsMenu: "SOBRE NOSOTROS",
+    aboutUsSubmenu: "Sobre Nosotros",
     ourServicesMenu: "NUESTROS SERVICIOS",
     personalCuratorMenu: "CURADOR PERSONAL",
     galleryMenu: "GALERÍA",
@@ -155,6 +158,7 @@ export const translations = {
     beautyServicesSub: "Servicios de belleza",
     generalSub: "General",
     tourSub: "Tour",
+    beautySub: "Belleza",
     // Wishlist page specific
     myWishlist: "MI LISTA DE DESEOS",
     yourSavedItems: "Sus artículos guardados",
@@ -234,6 +238,7 @@ export const translations = {
     
     // Menu Items
     aboutUsMenu: "О НАС",
+    aboutUsSubmenu: "О нас",
     ourServicesMenu: "НАШИ УСЛУГИ",
     personalCuratorMenu: "ПЕРСОНАЛЬНЫЙ КУРАТОР",
     galleryMenu: "ГАЛЕРЕЯ",
@@ -246,6 +251,7 @@ export const translations = {
     beautyServicesSub: "Косметические услуги",
     generalSub: "Общее",
     tourSub: "Тур",
+    beautySub: "Красота",
     // Wishlist page specific
     myWishlist: "МОЙ СПИСОК ЖЕЛАНИЙ",
     yourSavedItems: "Ваши сохраненные предметы",

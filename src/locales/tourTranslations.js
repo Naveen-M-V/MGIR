@@ -57,7 +57,7 @@ const tourTranslations = {
     // Form Fields
     acceptTerms: "I accept the",
     termsAndConditions: "Terms and Conditions",
-    payWithPayPal: "Pay with PayPal",
+    payWithPayPal: "Proceed to payment",
     securePayment: "Secure payment powered by PayPal",
     addToWishlist: "Add to Wishlist",
     inWishlist: "In Wishlist",
@@ -68,13 +68,13 @@ const tourTranslations = {
     personalCurator: "Personal Curator",
 
     // Tour Titles
-    privateColosseum: "Private Colosseum Tour with Underground and Arena Visit",
+    privateColosseum: "Private Colosseum Tour with Arena Visit",
     colossiumUnderground: "Colosseum underground & arena tour (private or semi-private)",
     romeVespaTour: "Rome Vespa Tour",
     colossiumArena: "Colosseum Arena Tour (Private/Semi - Private Tour)",
-    treviPantheon: "Trevi Fountain and Pantheon Private Underground Tour",
+    treviPantheon: "Underground Trevi Fountain & Pantheon Tour",
     romeGolfCart: "Rome Golf Cart Private Tour",
-    tivoliFountains: "Tivoli Fountains Car Tour (up to 4)",
+    tivoliFountains: "Private Tivoli Fountains Car Tour (up to 4)",
     colossiumAncientRome: "Colosseum and Ancient Rome Tour",
     foodTour: "Food Tour (up to 6)",
     vipVatican: "VIP Vatican Museum and Sistine Chapel Tour",
@@ -86,12 +86,53 @@ const tourTranslations = {
     romeVespaTour_desc: "Rome has a vast number of landmarks for curious travelors to discover, but navigating the city's busy streets to visit them can prove difficult. On this private half-day guided tour, hop aboard a Vespa scooter and be whisked away to the Colosseum, Circus Maximus, Pantheon, and more.",
     colossiumArena_desc: "Step into the heart of ancient Rome on this immersive tour that takes you beyond the ordinary. Experience the Colosseum like never before, walking directly onto the floor of the gladiator arena for an up-close view of the iconic amphitheater. Upgrade to a small group or even a private tour for a more interactive and immersive experience with your Expert Guide.",
     treviPantheon_desc: "Get up close to Roman engineering that isn't visible on the surface with this tour that goes beneath the Pantheon and Trevi Fountain. Starting at the 2-millennia-old Pantheon, follow your guide through the ancient temple itself, then down to the ruins of the Stadium of Domitian. The next stop is under the Trevi Fountain, in the Vicus Caprarius, where ancient aqueducts and buildings are preserved. Perfect for travelers returning to Rome looking to do something a little different from traditional sightseeing tours.",
-    romeGolfCart_desc: "Get up close to Rome and enjoy an enveloping view as you glide through the city streets on this private tour by comfortable street golf cart. Your driver-guide introduces the sights, including landmarks such as the Colosseum and the Spanish Steps, and lesser-known attractions such as the Pyramid of Caius Cestius. With pickup and drop-off at the central Rome addresses of your choice, it's a truly flexible experience.",
-    tivoliFountains_desc: "Explore Roman engineering that isn't visible on the surface with this tour. Get in a traditional Fiat 500 and travel to see the famous Tivoli fountains with lunch stop, starting at 9am until 3pm approximately",
+    romeGolfCart_desc: "Navigate the Eternal City with ease and style on this private, chauffeured Vespa tour—the ultimate way to see Rome efficiently and intimately.\n\nKey Tour Details\n• Duration: 1.5 to 2 hours (Approximate).\n• Mode: Travel on the back of a classic Italian Vespa scooter.\n• Driver: You ride as a passenger only, safely guided by our team of experienced, licensed drivers. You do not drive the scooter.\n• Group: Private tour reserved exclusively for your party.\n\nExperience & Sights\nRome's extensive list of landmarks can be difficult to cover. This tour solves the navigation challenge by quickly and comfortably transporting you to key attractions:\n• Efficiency: Bypass city traffic and easily access viewpoints and landmarks that larger vehicles cannot reach.\n• Landmarks: See major sites including the Colosseum, Circus Maximus, Pantheon, and other notable attractions along a curated route.\n• Immersion: Experience the city like a local, zipping through charming backstreets and lively piazzas for a memorable, cinematic adventure.\nThis is the ideal option for curious travelers who seek a quick, private, and authentic taste of Rome's iconic sights.",
+    tivoliFountains_desc: "Explore Roman engineering that isn't visible on the surface with this tour. Travel to see the famous Tivoli fountains with lunch stop (but lunch not included at Sibilla), starting at 9am until 3pm approximately",
     colossiumAncientRome_desc: "Immerse yourself in ancient history with this guided tour of the Roman Forum and the Colosseum. Led by a guide, explore these archaeological ruins and learn about their ongoing history and cultural significance. This tour is perfect for those who want to take the time to discover these particular monuments, as well as for visitors with a keen interest in ancient history.",
     foodTour_desc: "Start time 17:00 – try all musts in Rome with the local guide and experience the rich food culture of Rome.",
     vipVatican_desc: "Skip the crowds with exclusive VIP access to the Vatican Museums and Sistine Chapel. Marvel at Michelangelo's masterpieces and the world's most precious art collection with priority entry and expert guidance.Enjoy skip-the-line access to the Vatican Museums and Sistine Chapel, minimizing waiting time, when you book this exclusive trip led by a licensed guide. See the museums' mosttreasured treasures, including the Raphael Rooms and Laocoön and His Sons, then continue to the Sistine Chapel to learn about Michelangelo's masterpieces, The Last Judgment,and The Creation of Adam. Upgrade for a small-group experience or indulge in a private guide.",
-    colossiumForo_desc: "The Colosseum, the Roman Forum and the Palatine Hill formed the heart of ancient Rome. Experience the area at your own pace when you book these convenient packages, with an audio guide app to keep you informed. The entry-level option visits the Roman Forum, Palatine Hill, and the 'super sites' where emperors lived and played; other options include the Colosseum (arena floor, spectator levels, or both) with the Forum and Palatine Hill.",
+    colossiumForo_desc: "Experience the Colosseum like an insider on this highly personalized, queue-free tour. Limited to a maximum of 8 people, this offering guarantees an intimate, expert-led exploration of the world's most iconic amphitheater.\n\nTour Access & Experience\n* Intimate Private Group: This tour is exclusively for your party, limited to a maximum of 8 guests. This ensures a personal experience and the undivided attention of your guide.\n* Zero Wait Entry: Skip all standard entry and ticket lines through our dedicated access point, guaranteeing immediate entry and maximizing your time inside the monument.\n* Guided Colosseum Tour (1h 15m):\n* Expert Guidance: The Colosseum portion is fully guided by a fully licensed professional historian.\n* Tiers: Explore the first and second seating levels for a complete understanding of the structure and its purpose.\n* Roman Forum & Palatine Hill (Self-Guided): Your ticket includes entry to the vast archaeological area of the Roman Forum and Palatine Hill. This allows you complete freedom to wander, take photos, and explore these historic areas at your own pace after the guided Colosseum tour concludes.",
+
+    // Golf Cart Disclaimer
+    golfCartDisclaimer: "Duration of 3h is 80€ pp and 150€ pp for 6h, early morning and late evening are 10% extra",
+
+    // Package Selection
+    expressPackage: "Express",
+    fullTourPackage: "Full Tour",
+    selectPackage: "Select Package",
+
+    // E-Byke Tours
+    privateEBikeTour: "Private E-Byke Tour",
+    privateEBikeTour_desc: "Experience Rome in an eco-friendly way with our private electric bike tours. Choose from panoramic tours, romantic aperitivo picnics, or food tours by bike.",
+    startingFrom: "Starting from 324$/pp",
+    panoramicTour: "Panoramic tour of Rome's 7 hills",
+    panoramicTour_desc: "Discover the breathtaking views of Rome's seven hills on this comprehensive electric bike tour. Experience the city's most stunning viewpoints and hidden gems.",
+    aperibikeTour: "Aperibike - panoramic tour with romantic aperitivo picnic",
+    aperibikeTour_desc: "Combine sightseeing with romance on this unique tour that includes a panoramic bike ride followed by a romantic aperitivo picnic in a scenic location.",
+    foodTourBike: "Food Tour by bike",
+    foodTourBike_desc: "Explore Rome's culinary scene on two wheels. Visit local markets, traditional bakeries, and authentic restaurants while enjoying the city's atmosphere on an electric bike.",
+    
+    // E-Byke Tour Options
+    participants: "Participants",
+    selectParticipants: "Select Number of Participants",
+    privateTour1_2: "Private for 1 - 2 Participants  €350.00",
+    privateTour3: "Private 3 Participants\t€375",
+    privateTour4: "Private 4 Participants\t€437.5",
+    privateTour5: "Private 5 Participants\t€500.00",
+    privateTour6: "Private 6 Participants\t€562.50",
+    privateTour7: "Private 7 Participants\t€625.00",
+    privateTour8: "Private 8 Participants\t€687.5",
+    
+    // Food Tour Options
+    foodTour1_2: "Private 2 Participants\t€275.00",
+    foodTour3: "Private 3 Participants\t€300.00",
+    foodTour4: "Private 4 Participants\t€350.00",
+    foodTour5: "Private 5 Participants\t€437.50",
+    foodTour6: "Private 6 Participants\t€487.50",
+    foodTour7: "Private 7 Participants\t€525.00",
+    foodTour8: "Private 8 Participants\t€600.00",
+    
+    proceedToPayment: "Proceed to Payment",
   },
 
   es: {
@@ -116,7 +157,7 @@ const tourTranslations = {
     personCount: "número de personas",
     onlyOnePerson: "Solo 1 persona",
     minTwo: "Mín: 2",
-    selectTourTime: "Selecciona la hora del tour",
+    selectTourTime: "Seleccionar hora de inicio",
     selectLanguage: "Selecciona idioma",
     viewMoreDetails: "Ver más detalles",
     hideDetails: "Ocultar detalles",
@@ -152,7 +193,7 @@ const tourTranslations = {
     // Form Fields
     acceptTerms: "Acepto los",
     termsAndConditions: "Términos y Condiciones",
-    payWithPayPal: "Pagar con PayPal",
+    payWithPayPal: "Proceder al pago",
     securePayment: "Pago seguro con PayPal",
     addToWishlist: "Agregar a Lista de Deseos",
     inWishlist: "En Lista de Deseos",
@@ -163,11 +204,11 @@ const tourTranslations = {
     personalCurator: "Curador Personal",
 
     // Tour Titles
-    privateColosseum: "Tour Privado del Coliseo con Visita Subterránea y Arena",
+    privateColosseum: "Tour privado del Coliseo con visita a la arena",
     colossiumUnderground: "Tour subterráneo del Coliseo y arena (privado o semiprivado)",
     romeVespaTour: "Tour en Vespa por Roma",
     colossiumArena: "Tour de la Arena del Coliseo (Tour Privado/Semiprivado)",
-    treviPantheon: "Tour Privado Subterráneo de la Fuente de Trevi y el Panteón",
+    treviPantheon: "Visita subterránea a la Fontana de Trevi y al Panteón",
     romeGolfCart: "Tour Privado en Carrito de Golf por Roma",
     tivoliFountains: "Tour en Coche por las Fuentes de Tívoli (hasta 4 personas)",
     colossiumAncientRome: "Tour del Coliseo y la Antigua Roma",
@@ -181,12 +222,53 @@ const tourTranslations = {
     romeVespaTour_desc: "Roma tiene una gran cantidad de lugares emblemáticos para que los viajeros curiosos descubran, pero navegar por las concurridas calles de la ciudad para visitarlos puede resultar difícil. En este tour privado de medio día guiado, sube a un scooter Vespa y serás llevado al Coliseo, Circo Máximo, Panteón, y más.",
     colossiumArena_desc: "Adéntrate en el corazón de la antigua Roma en este tour inmersivo que te lleva más allá de lo ordinario. Experimenta el Coliseo como nunca antes, caminando directamente sobre el piso de la arena de gladiadores para una vista de cerca del anfiteatro icónico. Actualiza a un tour de grupo pequeño o incluso privado para una experiencia más interactiva e inmersiva con tu Guía Experto.",
     treviPantheon_desc: "Acércate a la ingeniería romana que no es visible en la superficie con este tour que va bajo el Panteón y la Fuente de Trevi. Comenzando en el Panteón de 2 milenios de antigüedad, sigue a tu guía a través del templo antiguo, luego baja a las ruinas del Estadio de Domiciano. El siguiente parada es bajo la Fuente de Trevi, en el Vicus Caprarius, donde se conservan antiguos acueductos y edificios. Perfecto para viajeros que regresan a Roma buscando hacer algo un poco diferente de los tours turísticos tradicionales.",
-    romeGolfCart_desc: "Acércate a Roma y disfruta de una vista envolvente mientras te deslizas por las calles de la ciudad en este tour privado en un cómodo carrito de golf callejero. Tu guía-conductor presenta los lugares de interés, incluidos lugares emblemáticos como el Coliseo y los Escalones Españoles, y atracciones menos conocidas como la Pirámide de Cayo Cestio. Con recogida y entrega en las direcciones centrales de Roma de tu elección, es una experiencia verdaderamente flexible.",
-    tivoliFountains_desc: "Explora la ingeniería romana que no es visible en la superficie con este tour. Sube a un Fiat 500 tradicional y viaja para ver las famosas fuentes de Tívoli con parada para almorzar, comenzando a las 9 am hasta aproximadamente las 3 pm",
+    romeGolfCart_desc: "Recorre la Ciudad Eterna con facilidad y estilo en este tour privado en Vespa con chofer: la mejor manera de conocer Roma de forma eficiente e íntima.\n\nDetalles clave del tour\n* Duración: 1,5 a 2 horas (aproximada).\n* Modalidad: Viaje en una Vespa italiana clásica.\n* Conductor: Viajará solo como pasajero, guiado de forma segura por nuestro equipo de conductores experimentados y con licencia. No conducirá la Vespa.\n* Grupo: Tour privado reservado exclusivamente para su grupo.\n\nExperiencia y lugares de interés\nLa extensa lista de lugares emblemáticos de Roma puede ser difícil de recorrer. Este tour resuelve el desafío de la navegación al transportarlo de forma rápida y cómoda a las atracciones clave:\n* Eficiencia: Evite el tráfico de la ciudad y acceda fácilmente a miradores y lugares emblemáticos a los que los vehículos más grandes no pueden llegar.\n* Lugares de interés: Vea los principales lugares, como el Coliseo, el Circo Máximo, el Panteón y otras atracciones notables a lo largo de una ruta diseñada específicamente para usted.\n* Inmersión: Vive la ciudad como un auténtico local, recorriendo encantadoras callejuelas y animadas plazas en una aventura memorable y cinematográfica.\nEsta es la opción ideal para viajeros curiosos que buscan una experiencia rápida, privada y auténtica de los lugares emblemáticos de Roma.",
+    tivoliFountains_desc: "Explora la ingeniería romana que no es visible en la superficie con este tour. Viaja para ver las famosas fuentes de Tivoli, con una parada para el almuerzo (el almuerzo no está incluido en Sibilla), comenzando a las 9:00 a. m. y finalizando aproximadamente a las 3:00 p. m.",
     colossiumAncientRome_desc: "Sumérgete en la historia antigua con este tour guiado del Foro Romano y el Coliseo. Guiado por un guía, explora estas ruinas arqueológicas y aprende sobre su historia continua y significado cultural. Este tour es perfecto para aquellos que desean tomarse el tiempo para descubrir estos monumentos particulares, así como para visitantes con un gran interés en la historia antigua.",
     foodTour_desc: "Hora de inicio 17:00 – prueba todos los imprescindibles en Roma con el guía local y experimenta la rica cultura gastronómica de Roma.",
     vipVatican_desc: "Evita las multitudes con acceso VIP exclusivo a los Museos Vaticanos y la Capilla Sixtina. Maravíllate con las obras maestras de Miguel Ángel y la colección de arte más preciosa del mundo con entrada prioritaria y orientación experta. Disfruta del acceso sin colas a los Museos Vaticanos y la Capilla Sixtina, minimizando el tiempo de espera, cuando reservas este viaje exclusivo dirigido por un guía con licencia. Ve los tesoros más preciados de los museos, incluidas las Salas de Rafael y Laocoonte e Hijos, luego continúa a la Capilla Sixtina para aprender sobre las obras maestras de Miguel Ángel, El Juicio Final y La Creación de Adán. Actualiza a una experiencia de grupo pequeño o disfruta de un guía privado.",
-    colossiumForo_desc: "El Coliseo, el Foro Romano y la Colina Palatina formaron el corazón de la antigua Roma. Experimenta el área a tu propio ritmo cuando reservas estos paquetes convenientes, con una aplicación de guía de audio para mantenerte informado. La opción de nivel de entrada visita el Foro Romano, la Colina Palatina y los 'super sitios' donde vivían y jugaban los emperadores; otras opciones incluyen el Coliseo (piso de arena, niveles de espectadores, o ambos) con el Foro y la Colina Palatina.",
+    colossiumForo_desc: "Experimente el Coliseo como un experto en este tour totalmente personalizado y sin colas. Limitado a un máximo de 8 personas, esta oferta garantiza una exploración íntima, guiada por expertos, del anfiteatro más emblemático del mundo.\n\nAcceso y Experiencia del Tour\n* Grupo Privado Íntimo: Este tour es exclusivo para su grupo, limitado a un máximo de 8 personas. Esto garantiza una experiencia personalizada y la atención exclusiva de su guía.\n* Entrada sin Esperas: Evite las filas estándar de entrada y boletos a través de nuestro punto de acceso exclusivo, garantizando así el acceso inmediato y maximizando su tiempo dentro del monumento.\n* Visita Guiada al Coliseo (1h 15m):\n* Guía Experta: La sección del Coliseo está completamente guiada por un historiador profesional con licencia.\n* Niveles: Explore el primer y segundo nivel de asientos para comprender completamente la estructura y su propósito.\n* Foro Romano y Monte Palatino (Autoguiado): Su boleto incluye acceso a la vasta zona arqueológica del Foro Romano y el Monte Palatino. Esto le permite total libertad para pasear, tomar fotos y explorar estas zonas históricas a su propio ritmo una vez finalizada la visita guiada al Coliseo.",
+
+    // Golf Cart Disclaimer
+    golfCartDisclaimer: "La duración de 3h es de 80€ pp y 150€ pp para 6h, temprano por la mañana y tarde por la noche tienen un 10% adicional",
+
+    // Package Selection
+    expressPackage: "Exprés",
+    fullTourPackage: "Tour completo",
+    selectPackage: "Seleccionar paquete",
+
+    // E-Byke Tours
+    privateEBikeTour: "Tour privado en bicicleta eléctrica",
+    privateEBikeTour_desc: "Experimenta Roma de manera ecológica con nuestros tours privados en bicicleta eléctrica. Elige entre tours panorámicos, picnics románticos con aperitivo o tours gastronómicos en bicicleta.",
+    startingFrom: "Desde 324€/pp",
+    panoramicTour: "Recorrido panorámico por las 7 colinas de Roma",
+    panoramicTour_desc: "Descubre las impresionantes vistas de las siete colinas de Roma en este tour integral en bicicleta eléctrica. Experimenta los puntos de vista más espectaculares de la ciudad y joyas ocultas.",
+    aperibikeTour: "Aperibike - tour panorámico con aperitivo romántico",
+    aperibikeTour_desc: "Combina el turismo con romance en este tour único que incluye un paseo panorámico en bicicleta seguido de un picnic romántico con aperitivo en un lugar escénico.",
+    foodTourBike: "Tour gastronómico en bicicleta",
+    foodTourBike_desc: "Explora la escena culinaria de Roma sobre dos ruedas. Visita mercados locales, panaderías tradicionales y restaurantes auténticos mientras disfrutas de la atmósfera de la ciudad en una bicicleta eléctrica.",
+    
+    // E-Byke Tour Options
+    participants: "participantes",
+    selectParticipants: "Seleccionar número de participantes",
+    privateTour1_2: "Privado para 1 - 2 Participantes  €350.00",
+    privateTour3: "Privado 3 Participantes\t€375",
+    privateTour4: "Privado 4 Participantes\t€437.5",
+    privateTour5: "Privado 5 Participantes\t€500.00",
+    privateTour6: "Privado 6 Participantes\t€562.50",
+    privateTour7: "Privado 7 Participantes\t€625.00",
+    privateTour8: "Privado 8 Participantes\t€687.5",
+    
+    // Food Tour Options
+    foodTour1_2: "Privado 2 Participantes\t€275.00",
+    foodTour3: "Privado 3 Participantes\t€300.00",
+    foodTour4: "Privado 4 Participantes\t€350.00",
+    foodTour5: "Privado 5 Participantes\t€437.50",
+    foodTour6: "Privado 6 Participantes\t€487.50",
+    foodTour7: "Privado 7 Participantes\t€525.00",
+    foodTour8: "Privado 8 Participantes\t€600.00",
+    
+    proceedToPayment: "Proceder al pago",
   },
 
   ru: {
@@ -211,7 +293,7 @@ const tourTranslations = {
     personCount: "количество человек",
     onlyOnePerson: "Только 1 человек",
     minTwo: "Мин: 2",
-    selectTourTime: "Выберите время тура",
+    selectTourTime: "Выберите время начала",
     selectLanguage: "Выберите язык",
     viewMoreDetails: "Подробнее",
     hideDetails: "Скрыть подробности",
@@ -247,7 +329,7 @@ const tourTranslations = {
     // Form Fields
     acceptTerms: "Я принимаю",
     termsAndConditions: "Условия использования",
-    payWithPayPal: "Оплатить через PayPal",
+    payWithPayPal: "Перейти к оплате",
     securePayment: "Безопасная оплата через PayPal",
     addToWishlist: "Добавить в список желаний",
     inWishlist: "В списке желаний",
@@ -258,13 +340,13 @@ const tourTranslations = {
     personalCurator: "Личный куратор",
 
     // Tour Titles
-    privateColosseum: "Частный тур по Колизею с посещением подземелья и арены",
+    privateColosseum: "Частная экскурсия по Колизею с посещением арены",
     colossiumUnderground: "Тур по подземелью Колизея и арене (частный или полуприватный)",
     romeVespaTour: "Тур по Риму на Vespa",
     colossiumArena: "Экскурсия по арене Колизея (частный/полуприватный тур)",
-    treviPantheon: "Частный подземный тур фонтана Треви и Пантеона",
+    treviPantheon: "Экскурсия по подземному фонтану Треви и Пантеону.",
     romeGolfCart: "Частный тур по Риму на гольф-каре",
-    tivoliFountains: "Тур на машине по фонтанам Тиволи (до 4 человек)",
+    tivoliFountains: "Исследуйте римскую инженерную мысль, скрытую под поверхностью, в этом туре. Отправьтесь посмотреть знаменитые фонтаны Тиволи с остановкой на обед (обед не включён в ресторане Sibilla). Начало в 9:00, окончание примерно в 15:00.",
     colossiumAncientRome: "Тур по Колизею и Древнему Риму",
     foodTour: "Гастрономический тур (до 6 человек)",
     vipVatican: "VIP-тур по музеям Ватикана и Сикстинской капелле",
@@ -276,12 +358,53 @@ const tourTranslations = {
     romeVespaTour_desc: "Рим имеет множество достопримечательностей для любознательных путешественников, но навигация по оживленным улицам города для их посещения может быть сложной. В этом частном полудневном экскурсионном туре сядьте на скутер Vespa и отправьтесь к Колизею, Цирку Максимуса, Пантеону и многому другому.",
     colossiumArena_desc: "Окунитесь в сердце Древнего Рима в этом захватывающем туре, который выходит за рамки обычного. Испытайте Колизей как никогда раньше, пройдя прямо на пол гладиаторской арены для близкого просмотра знакового амфитеатра. Обновитесь до небольшой групповой экскурсии или даже частного тура для более интерактивного и захватывающего опыта с вашим экспертным гидом.",
     treviPantheon_desc: "Познакомьтесь с римской инженерией, которая не видна на поверхности, в этом туре, который проходит под Пантеоном и фонтаном Треви. Начиная с двухтысячелетнего Пантеона, следуйте за своим гидом через древний храм, а затем вниз к руинам Стадиона Домициана. Следующая остановка находится под фонтаном Треви, в Vicus Caprarius, где сохранились древние акведуки и здания. Идеально подходит для путешественников, возвращающихся в Рим и ищущих что-то немного отличающееся от традиционных туристических туров.",
-    romeGolfCart_desc: "Приблизьтесь к Риму и наслаждайтесь захватывающим видом, скользя по улицам города в этом частном туре на удобном уличном гольф-каре. Ваш гид-водитель представляет достопримечательности, включая такие знаковые места, как Колизей и Испанские ступени, а также менее известные достопримечательности, такие как Пирамида Кая Цестия. С доставкой и высадкой в центральных адресах Рима по вашему выбору это действительно гибкий опыт.",
-    tivoliFountains_desc: "Исследуйте римскую инженерию, которая не видна на поверхности, в этом туре. Сядьте в традиционный Fiat 500 и путешествуйте, чтобы увидеть знаменитые фонтаны Тиволи с остановкой на обед, начиная с 9 утра до примерно 3 часов дня",
+    romeGolfCart_desc: "Путешествуйте по Вечному городу с легкостью и стилем на этом частном туре на скутере Vespa с водителем — это лучший способ быстро и комфортно осмотреть Рим.\n\nОсновные характеристики тура\n* Продолжительность: от 1,5 до 2 часов (приблизительно).\n* Вид транспорта: Путешествие на классическом итальянском скутере Vespa.\n* Водитель: Вы едете только в качестве пассажира, под безопасным руководством нашей команды опытных, лицензированных водителей. Вы не управляете скутером.\n* Группа: Частный тур, зарезервированный исключительно для вашей группы.\n\nВпечатления и достопримечательности\nОбширный список достопримечательностей Рима может быть сложно осмотреть. Этот тур решает проблему навигации, быстро и комфортно доставляя вас к ключевым достопримечательностям:\n* Эффективность: Объезжайте городские пробки и легко добирайтесь до смотровых площадок и достопримечательностей, недоступных для более крупных транспортных средств.\n* Достопримечательности: Осмотрите основные места, включая Колизей, Цирк Максимус, Пантеон и другие известные достопримечательности, вдоль специально разработанного маршрута.\n* Погружение: почувствуйте себя местным жителем, проносясь по очаровательным переулкам и оживленным площадям, чтобы получить незабываемые впечатления, словно сошедшие с экрана кинофильма.\nЭто идеальный вариант для любознательных путешественников, желающих быстро, в уединении и с аутентичным колоритом познакомиться с культовыми достопримечательностями Рима.",
+    tivoliFountains_desc: "Исследуйте римскую инженерную мысль, скрытую под поверхностью, в этом туре. Отправьтесь посмотреть знаменитые фонтаны Тиволи с остановкой на обед (обед не включён в ресторане Sibilla). Начало в 9:00, окончание примерно в 15:00.",
     colossiumAncientRome_desc: "Погрузитесь в древнюю историю в этом экскурсионном туре по Римскому форуму и Колизею. Под руководством гида исследуйте эти археологические руины и узнайте об их истории и культурной значимости. Этот тур идеален для тех, кто хочет найти время для изучения этих конкретных памятников, а также для посетителей, которые глубоко интересуются древней историей.",
     foodTour_desc: "Время начала 17:00 – попробуйте все необходимое в Риме с местным гидом и испытайте богатую пищевую культуру Рима.",
     vipVatican_desc: "Избегайте толпы с эксклюзивным VIP-доступом к музеям Ватикана и Сикстинской капелле. Восхищайтесь шедеврами Микеланджело и самой драгоценной коллекцией искусства в мире с приоритетным входом и экспертным руководством. Наслаждайтесь доступом без очередей к музеям Ватикана и Сикстинской капелле, минимизируя время ожидания, когда вы бронируете этот эксклюзивный тур под руководством лицензированного гида. Посмотрите самые сокровищные сокровища музеев, включая Рафаэльские комнаты и Лаокоона и его сыновей, затем перейдите в Сикстинскую капеллу, чтобы узнать о шедеврах Микеланджело, Страшном суде и Сотворении Адама. Обновитесь до небольшого группового опыта или насладитесь частным гидом.",
-    colossiumForo_desc: "Колизей, Римский форум и Палатинский холм составляли сердце Древнего Рима. Испытайте эту территорию в своем собственном темпе, когда вы бронируете эти удобные пакеты, с приложением аудиогида, чтобы держать вас в курсе. Вариант начального уровня посещает Римский форум, Палатинский холм и 'супер сайты', где жили и играли императоры; другие варианты включают Колизей (пол арены, уровни зрителей или оба) с форумом и Палатинским холмом.",
+    colossiumForo_desc: "Откройте для себя Колизей глазами знатока на этой индивидуальной экскурсии без очередей. Экскурсия рассчитана максимум на 8 человек и гарантирует вам незабываемое знакомство с самым культовым амфитеатром мира под руководством опытного гида.\n\nДоступ к экскурсии и впечатления\n* Индивидуальная частная группа: Эта экскурсия предназначена исключительно для вашей компании, максимум для 8 гостей. Это гарантирует индивидуальный подход и полное внимание вашего гида.\n* Вход без очередей: Пропустите все стандартные очереди на вход и покупку билетов через наш специальный пункт доступа, гарантируя немедленный вход и максимально используя время внутри памятника.\n* Экскурсия по Колизею с гидом (1 час 15 минут):\n* Экспертное сопровождение: Экскурсия по Колизею проводится под руководством лицензированного профессионального историка.\n* Ярусы: Исследуйте первый и второй ярусы для полного понимания структуры и ее назначения.\n* Римский форум и Палатинский холм (самостоятельная экскурсия): Ваш билет включает вход на обширную археологическую территорию Римского форума и Палатинского холма. Это дает вам полную свободу передвижения, возможность фотографировать и исследовать эти исторические места в своем собственном темпе после завершения экскурсии по Колизею.",
+
+    // Golf Cart Disclaimer
+    golfCartDisclaimer: "Продолжительность 3 часа — 80 евро с человека, 6 часов — 150 евро с человека; за раннее утро и поздний вечер взимается дополнительная плата в размере 10%.",
+
+    // Package Selection
+    expressPackage: "Экспресс",
+    fullTourPackage: "Полная экскурсия",
+    selectPackage: "Выберите пакет",
+
+    // E-Byke Tours
+    privateEBikeTour: "Индивидуальная экскурсия на электровелосипеде",
+    privateEBikeTour_desc: "Познакомьтесь с Римом экологичным способом с нашими частными экскурсиями на электровелосипедах. Выбирайте между панорамными турами, романтическими пикниками с аперитивом или гастрономическими турами на велосипеде.",
+    startingFrom: "От 324€/чел.",
+    panoramicTour: "Панорамная экскурсия по 7 холмам Рима",
+    panoramicTour_desc: "Откройте для себя захватывающие виды на семь холмов Рима в этой комплексной экскурсии на электровелосипеде. Насладитесь самыми впечатляющими видами города и скрытыми жемчужинами.",
+    aperibikeTour: "Аперибайк — панорамная экскурсия с романтическим пикником-аперитивом",
+    aperibikeTour_desc: "Сочетайте осмотр достопримечательностей с романтикой в этой уникальной экскурсии, которая включает панорамную поездку на велосипеде, за которой следует романтический пикник с аперитивом в живописном месте.",
+    foodTourBike: "Гастрономическая экскурсия на велосипеде",
+    foodTourBike_desc: "Исследуйте кулинарную сцену Рима на двух колесах. Посетите местные рынки, традиционные пекарни и аутентичные рестораны, наслаждаясь атмосферой города на электровелосипеде.",
+    
+    // E-Byke Tour Options
+    participants: "Участники",
+    selectParticipants: "Выберите количество участников",
+    privateTour1_2: "Частный для 1 - 2 Участников  €350.00",
+    privateTour3: "Частный 3 Участника\t€375",
+    privateTour4: "Частный 4 Участника\t€437.5",
+    privateTour5: "Частный 5 Участников\t€500.00",
+    privateTour6: "Частный 6 Участников\t€562.50",
+    privateTour7: "Частный 7 Участников\t€625.00",
+    privateTour8: "Частный 8 Участников\t€687.5",
+    
+    // Food Tour Options
+    foodTour1_2: "Частный 2 Участника\t€275.00",
+    foodTour3: "Частный 3 Участника\t€300.00",
+    foodTour4: "Частный 4 Участника\t€350.00",
+    foodTour5: "Частный 5 Участников\t€437.50",
+    foodTour6: "Частный 6 Участников\t€487.50",
+    foodTour7: "Частный 7 Участников\t€525.00",
+    foodTour8: "Частный 8 Участников\t€600.00",
+    
+    proceedToPayment: "Перейти к оплате",
   },
 };
 

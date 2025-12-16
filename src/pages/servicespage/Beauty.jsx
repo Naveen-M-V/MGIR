@@ -94,7 +94,7 @@ function SectionCard({ image, title, description, price, place, onClick, gradien
   );
 }
 
-function BookingFormModal({ isOpen, onClose, serviceName, servicePrice, onPaymentClick, t }) {
+function BookingFormModal({ isOpen, onClose, serviceName, servicePrice, serviceKey, onPaymentClick, t }) {
   const { addToWishlist, isInWishlist } = useWishlist();
   const [animateIn, setAnimateIn] = useState(false);
   const [serviceDate, setServiceDate] = useState("");
@@ -197,7 +197,7 @@ function BookingFormModal({ isOpen, onClose, serviceName, servicePrice, onPaymen
                 {serviceName} {t?.bookAService || "Booking"}
               </h2>
               <p className="text-white/70">Price: {servicePrice}</p>
-              {serviceName === t.hairColourAndStyle && (
+              {serviceKey === "hairColourAndStyle" && (
                 <>
                   <p className="text-amber-400 text-sm font-semibold mt-2">
                     Min. Deposit €150
@@ -207,7 +207,7 @@ function BookingFormModal({ isOpen, onClose, serviceName, servicePrice, onPaymen
                   </p>
                 </>
               )}
-              {serviceName === t.hairExtension && (
+              {serviceKey === "hairExtension" && (
                 <>
                   <p className="text-amber-400 text-sm font-semibold mt-2">
                     Min. Deposit €300
@@ -368,9 +368,9 @@ function BookingFormModal({ isOpen, onClose, serviceName, servicePrice, onPaymen
                 />
                 <label className="cursor-pointer">
                   {t.iAcceptThe}{" "}
-                  <a href="/terms-and-conditions" className="text-purple-300 hover:text-purple-200 underline font-medium">
+                  <Link to="/terms-and-conditions" className="text-purple-300 hover:text-purple-200 underline font-medium">
                     {t.termsAndConditions}
-                  </a>
+                  </Link>
                 </label>
               </div>
 
@@ -509,8 +509,8 @@ function CustomizeServiceModal({ isOpen, onClose, availableServices, t }) {
   const finalTotal = originalTotal - discountAmount;
   
   // Check if Hair Extension or Hair Colour and Style is selected
-  const hasHairExtension = selectedServices.includes("Hair Extension");
-  const hasHairColourStyle = selectedServices.includes("Hair colour and style ");
+  const hasHairExtension = selectedServiceData.some(service => service.titleKey === "hairExtension");
+  const hasHairColourStyle = selectedServiceData.some(service => service.titleKey === "hairColourAndStyle");
 
   const formValid =
     customerName && serviceDate && serviceTime && locationType && address && 
@@ -931,11 +931,11 @@ export default function Beauty() {
   
   const services = getServices();
 
-  const openModal = (title, price) => {
+  const openModal = (title, price, titleKey = null) => {
     console.log('Opening modal for:', title, price);
-    setModalInfo({ open: true, title, price });
+    setModalInfo({ open: true, title, price, titleKey });
   };
-  const closeModal = () => setModalInfo({ open: false, title: "", price: "" });
+  const closeModal = () => setModalInfo({ open: false, title: "", price: "", titleKey: null });
 
   const openCustomizeModal = () => {
     setIsCustomizeOpen(true);
@@ -989,7 +989,7 @@ export default function Beauty() {
             </div> 
 
             {/* Main Title */}
-            <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-pink-200 via-rose-300 to-amber-400 bg-clip-text text-transparent drop-shadow-2xl">
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-pink-200 via-rose-300 to-amber-400 bg-clip-text text-transparent drop-shadow-2xl font-futura">
               {t.beautyServicesTitle}
             </h1>
             
@@ -1034,7 +1034,7 @@ export default function Beauty() {
 
 
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 font-futura">
                 {t.chooseYourBeautyExperience}
               </h2>
               <div className="w-24 h-1 bg-gradient-to-r from-pink-400 to-rose-500 mx-auto mb-6 rounded-full" />
@@ -1056,7 +1056,7 @@ export default function Beauty() {
                   onClick={() =>
                     service.title === t.chooseYourPackage
                       ? openCustomizeModal()
-                      : openModal(service.title, service.price)
+                      : openModal(service.title, service.price, service.titleKey)
                   }
                 />
               ))}
@@ -1074,7 +1074,7 @@ export default function Beauty() {
                       //description={service.description}
                       price={service.price}
                       gradient={service.gradient}
-                      onClick={() => openModal(service.title, service.price)}
+                      onClick={() => openModal(service.title, service.price, service.titleKey)}
                     />
                   ))}
                 </div>
@@ -1086,7 +1086,7 @@ export default function Beauty() {
         {/* Call to Action */}
                 <section className="py-20 px-8">
                   <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
+                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 font-futura">
                       {t.discoverRoman}
                     </h2>
                     <p className="text-xl text-white/70 mb-12 max-w-2xl mx-auto">
@@ -1110,6 +1110,7 @@ export default function Beauty() {
         onClose={closeModal}
         serviceName={modalInfo.title}
         servicePrice={modalInfo.price}
+        serviceKey={modalInfo.titleKey}
         t={t}
       />
 

@@ -78,7 +78,8 @@ function SectionCard({ image, title, description, price, place, onClick, gradien
 
 
 
- function BookingModal({ onClose }) {
+ function BookingModal({ onClose, t }) {
+  const tr = t || carServicesTranslations.en;
   const [step, setStep] = useState(1);
   const [animateIn, setAnimateIn] = useState(false);
 
@@ -139,14 +140,14 @@ function SectionCard({ image, title, description, price, place, onClick, gradien
         if (approvalUrl) {
           window.location.href = approvalUrl;
         } else {
-          alert('Unable to redirect to PayPal. Please try again.');
+          alert(tr.paypalRedirectError || 'Unable to redirect to PayPal. Please try again.');
         }
       } else {
-        alert('Failed to create order. Please try again.');
+        alert(tr.orderCreateFailed || 'Failed to create order. Please try again.');
       }
     } catch (error) {
       console.error('Payment error:', error);
-      alert('Payment failed. Please try again.');
+      alert(tr.paymentFailed || 'Payment failed. Please try again.');
     }
   };
 
@@ -172,8 +173,8 @@ function SectionCard({ image, title, description, price, place, onClick, gradien
             
             {/* Close Button */}
             <button
-              aria-label="Close"
-              title="Close"
+              aria-label={tr.close || 'Close'}
+              title={tr.close || 'Close'}
               onClick={onClose}
               className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 group z-50"
             >
@@ -184,7 +185,7 @@ function SectionCard({ image, title, description, price, place, onClick, gradien
             {/* Header */}
             <div className="text-center mb-8">
               <h2 className="text-3xl font-bold bg-gradient-to-r from-emerald-300 to-teal-400 bg-clip-text text-transparent mb-2">
-                Book Your Ride
+                {tr.bookYourRide || 'Book Your Ride'}
               </h2>
               <div className="w-20 h-0.5 bg-gradient-to-r from-cyan-500 to-blue-600 mx-auto rounded-full" />
             </div>
@@ -193,23 +194,23 @@ function SectionCard({ image, title, description, price, place, onClick, gradien
             {step === 1 && (
               <div className="space-y-6">
                 <div>
-                  <label className="block text-white mb-2 font-medium">Arrival Date</label>
+                  <label className="block text-white mb-2 font-medium">{tr.arrivalDate || 'Arrival Date'}</label>
                   <ModernDatePicker
                     selected={selectedDateObj}
                     onSelect={(date) => {
                       setSelectedDateObj(date);
                       setSelectedTime("");
                     }}
-                    placeholder="Select a date"
+                    placeholder={tr.selectDate || 'Select a date'}
                   />
                 </div>
                 {selectedDateObj && (
                   <div>
-                    <label className="block text-white mb-2 font-medium">Arrival Time</label>
+                    <label className="block text-white mb-2 font-medium">{tr.arrivalTime || 'Arrival Time'}</label>
                     <ModernTimePicker
                       selected={selectedTime}
                       onSelect={setSelectedTime}
-                      placeholder="Select a time"
+                      placeholder={tr.selectTime || 'Select a time'}
                       interval={60}
                       startHour={8}
                       endHour={18}
@@ -225,7 +226,7 @@ function SectionCard({ image, title, description, price, place, onClick, gradien
                       : "bg-white/10 text-white/60 border border-white/20 cursor-not-allowed"
                   }`}
                 >
-                  Continue
+                  {tr.continue || 'Continue'}
                 </button>
               </div>
             )}
@@ -233,33 +234,33 @@ function SectionCard({ image, title, description, price, place, onClick, gradien
             {/* Step 2: Flight Details */}
             {step === 2 && (
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-cyan-300 text-center">Flight Details</h3>
+                <h3 className="text-xl font-semibold text-cyan-300 text-center">{tr.flightDetails || 'Flight Details'}</h3>
                 <select
                   value={airport}
                   onChange={(e) => setAirport(e.target.value)}
                   className="w-full border border-white/20 rounded-lg py-2 px-3 bg-white/10 text-black focus:border-emerald-400"
                 >
-                  <option value="">Select Airport</option>
+                  <option value="">{tr.selectAirport || 'Select Airport'}</option>
                   <option value="FCO">FCO</option>
                   <option value="CIA">CIA</option>
                 </select>
                 <input
                   type="text"
-                  placeholder="Terminal"
+                  placeholder={tr.terminal || 'Terminal'}
                   value={terminal}
                   onChange={(e) => setTerminal(e.target.value)}
                   className="w-full border border-white/20 rounded-lg py-2 px-3 bg-white/10 text-white"
                 />
                 <input
                   type="text"
-                  placeholder="Airline Name"
+                  placeholder={tr.airlineName || 'Airline Name'}
                   value={airlineName}
                   onChange={(e) => setAirlineName(e.target.value)}
                   className="w-full border border-white/20 rounded-lg py-2 px-3 bg-white/10 text-white"
                 />
                 <input
                   type="text"
-                  placeholder="Flight Number"
+                  placeholder={tr.flightNumber || 'Flight Number'}
                   value={flightNumber}
                   onChange={(e) => setFlightNumber(e.target.value)}
                   className="w-full border border-white/20 rounded-lg py-2 px-3 bg-white/10 text-white"
@@ -271,7 +272,7 @@ function SectionCard({ image, title, description, price, place, onClick, gradien
                   className="w-full border border-white/20 rounded-lg py-2 px-3 bg-white/10 text-white"
                 />
                 <div className="flex justify-between mt-4">
-                  <button onClick={() => goToStep(1)} className="px-4 py-2 text-white border border-white/20 rounded-lg hover:bg-white/10">Back</button>
+                  <button onClick={() => goToStep(1)} className="px-4 py-2 text-white border border-white/20 rounded-lg hover:bg-white/10">{tr.back || 'Back'}</button>
                   <button
                     onClick={() => step2Valid && goToStep(3)}
                     disabled={!step2Valid}
@@ -281,7 +282,7 @@ function SectionCard({ image, title, description, price, place, onClick, gradien
                         : "bg-white/10 text-white/60 border border-white/20 cursor-not-allowed"
                     }`}
                   >
-                    Next
+                    {tr.next || 'Next'}
                   </button>
                 </div>
               </div>
@@ -290,30 +291,30 @@ function SectionCard({ image, title, description, price, place, onClick, gradien
             {/* Step 3: Client Details */}
             {step === 3 && (
               <div className="space-y-4">
-                <h3 className="text-xl font-semibold text-cyan-300 text-center">Client Details</h3>
+                <h3 className="text-xl font-semibold text-cyan-300 text-center">{tr.customerDetails || 'Customer Details'}</h3>
                 <input
                   type="tel"
-                  placeholder="Mobile Number"
+                  placeholder={tr.mobileNumber || 'Mobile Number'}
                   value={mobileNumber}
                   onChange={(e) => setMobileNumber(e.target.value)}
                   className="w-full border border-white/20 rounded-lg py-2 px-3 bg-white/10 text-white"
                 />
                 <input
                   type="text"
-                  placeholder="Full Name"
+                  placeholder={tr.fullName || 'Full Name'}
                   value={fullName}
                   onChange={(e) => setFullName(e.target.value)}
                   className="w-full border border-white/20 rounded-lg py-2 px-3 bg-white/10 text-white"
                 />
                 <textarea
-                  placeholder="Special Instructions (optional)"
+                  placeholder={tr.specialInstructionsOptional || 'Special Instructions (optional)'}
                   value={specialInstructions}
                   onChange={(e) => setSpecialInstructions(e.target.value.slice(0, 600))}
                   className="w-full border border-white/20 rounded-lg py-2 px-3 bg-white/10 text-white"
                 />
                 <input
                   type="tel"
-                  placeholder="Contact Number"
+                  placeholder={tr.contactNumber || 'Contact Number'}
                   value={contactNumber}
                   onChange={(e) => setContactNumber(e.target.value)}
                   className="w-full border border-white/20 rounded-lg py-2 px-3 bg-white/10 text-white"
@@ -328,14 +329,15 @@ function SectionCard({ image, title, description, price, place, onClick, gradien
                     className="accent-cyan-400 flex-shrink-0 w-4 h-4 mt-0.5 cursor-pointer"
                   />
                   <label className="cursor-pointer">
-                    {t.iAcceptThe} <a href="/terms-and-conditions" className="text-cyan-300 hover:text-cyan-200 underline font-medium">
-                      {t.termsAndConditions}
-                    </a>
+                    {tr.iAcceptThe || 'I accept the'}{" "}
+                    <Link to="/terms-and-conditions" className="text-cyan-300 hover:text-cyan-200 underline font-medium">
+                      {tr.termsAndConditions || 'Terms and Conditions'}
+                    </Link>
                   </label>
                 </div>
 
                 <div className="flex justify-between mt-4">
-                  <button onClick={() => goToStep(2)} className="px-4 py-2 text-white border border-white/20 rounded-lg hover:bg-white/10">{t.back}</button>
+                  <button onClick={() => goToStep(2)} className="px-4 py-2 text-white border border-white/20 rounded-lg hover:bg-white/10">{tr.back || 'Back'}</button>
                   <button
                     onClick={() => step3Valid && handleBookingSubmit()}
                     disabled={!step3Valid}
@@ -348,13 +350,13 @@ function SectionCard({ image, title, description, price, place, onClick, gradien
                     {step3Valid && (
                         null
                     )}
-                    {step3Valid ? 'Pay with PayPal - €80' : 'Complete form'}
+                    {step3Valid ? `${tr.payWithPayPal || 'Pay with PayPal'} - €80` : (tr.completeAllRequiredFields || 'Complete all required fields')}
                   </button>
                   
                   {step3Valid && (
                     <div className="text-center mt-2">
                       <p className="text-white/50 text-xs">
-                        {t.securePaymentPoweredByPayPal || "Secure payment powered by PayPal"}
+                        {tr.securePaymentPoweredByPayPal || "Secure payment powered by PayPal"}
                       </p>
                     </div>
                   )}
@@ -468,14 +470,14 @@ function PrivateChauffeurModal({ onClose, t }) {
         if (approvalUrl) {
           window.location.href = approvalUrl;
         } else {
-          alert('Unable to redirect to PayPal. Please try again.');
+          alert(t.paypalRedirectError || 'Unable to redirect to PayPal. Please try again.');
         }
       } else {
-        alert('Failed to create order. Please try again.');
+        alert(t.orderCreateFailed || 'Failed to create order. Please try again.');
       }
     } catch (error) {
       console.error('Payment error:', error);
-      alert('Payment failed. Please try again.');
+      alert(t.paymentFailed || 'Payment failed. Please try again.');
     }
   };
 
@@ -498,8 +500,8 @@ function PrivateChauffeurModal({ onClose, t }) {
           
           {/* Close Button */}
           <button
-            aria-label="Close"
-            title="Close"
+            aria-label={t?.close || 'Close'}
+            title={t?.close || 'Close'}
             onClick={onClose}
             className="absolute top-4 right-4 w-10 h-10 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 group z-50"
           >
@@ -644,7 +646,7 @@ function PrivateChauffeurModal({ onClose, t }) {
                     +
                   </button>
                   <span className="text-white/70 text-sm ml-2">
-                    {formData.days} day{formData.days > 1 ? 's' : ''} selected
+                    {formData.days} {formData.days > 1 ? (t.daysSelected || 'days selected') : (t.daySelected || 'day selected')}
                   </span>
                 </div>
               </div>
@@ -655,7 +657,7 @@ function PrivateChauffeurModal({ onClose, t }) {
                   <svg className="w-4 h-4 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                     <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8 7V3m8 4V3m-9 8h18M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
                   </svg>
-                  Service Dates * ({formData.selectedDates.length}/{formData.days} selected)
+                  {(t.serviceDates || 'Service Dates')} * ({formData.selectedDates.length}/{formData.days} {(t.selected || 'selected')})
                 </label>
                 <ModernDatePicker
                   selected={formData.selectedDates.map(dateStr => {
@@ -663,14 +665,14 @@ function PrivateChauffeurModal({ onClose, t }) {
                     return new Date(year, month - 1, day);
                   })}
                   onSelect={handleDateSelect}
-                  placeholder="Click to select dates"
+                  placeholder={t.clickToSelectDates || 'Click to select dates'}
                   mode="multiple"
                 />
                 
                 {/* Selected Dates Display */}
                 {formData.selectedDates.length > 0 && (
                   <div className="mt-3 p-3 bg-white/5 rounded-lg border border-white/10">
-                    <h4 className="text-white/90 text-sm font-medium mb-2">Selected Dates:</h4>
+                    <h4 className="text-white/90 text-sm font-medium mb-2">{t.selectedDates || 'Selected Dates:'}</h4>
                     <div className="flex flex-wrap gap-2">
                       {formData.selectedDates.map((date, index) => (
                         <span
@@ -695,7 +697,7 @@ function PrivateChauffeurModal({ onClose, t }) {
                   onChange={(e) => handleInputChange('specialRequests', e.target.value)}
                   rows={3}
                   className="w-full px-4 py-3 bg-white/10 border border-white/20 rounded-xl text-white placeholder-white/50 focus:outline-none focus:border-slate-400 focus:ring-1 focus:ring-slate-400 transition-all duration-300 resize-none"
-                  placeholder="Any special requirements or destinations you'd like to visit..."
+                  placeholder={t.anySpecialRequirementsOrDestinations || "Any special requirements or destinations you'd like to visit..."}
                 />
               </div>
 
@@ -708,9 +710,10 @@ function PrivateChauffeurModal({ onClose, t }) {
                   className="accent-slate-400 flex-shrink-0 w-4 h-4 mt-0.5 cursor-pointer"
                 />
                 <label className="cursor-pointer">
-                  {t.iAcceptThe} <a href="/terms-and-conditions" className="text-slate-300 hover:text-slate-200 underline font-medium">
+                  {t.iAcceptThe}{" "}
+                  <Link to="/terms-and-conditions" className="text-slate-300 hover:text-slate-200 underline font-medium">
                     {t.termsAndConditions}
-                  </a>
+                  </Link>
                 </label>
               </div>
 
@@ -729,7 +732,7 @@ function PrivateChauffeurModal({ onClose, t }) {
                     <svg className="w-5 h-5" fill="currentColor" viewBox="0 0 24 24">
                       <path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm-2 15l-5-5 1.41-1.41L10 14.17l7.59-7.59L19 8l-9 9z"/>
                     </svg>
-                    Pay with PayPal - €{formData.days * 500}
+                    {t.payWithPayPal || 'Pay with PayPal'} - €{formData.days * 500}
                   </>
                 ) : (
                   t.completeAllRequiredFields || "Complete all required fields"
@@ -810,16 +813,16 @@ function AirportTransferModal({ onClose, onSelectOption, t }) {
 
   const transferOptions = [
     { 
-      name: "Up to 2 People", 
-      price: "From €90 (one way)",
+      name: t.upTo2People || "Up to 2 People", 
+      price: t.from90OneWay || "From €90 (one way)",
       capacity: "2",
       image: "/AT2.jpeg",
       gradient: "from-amber-400/30 to-orange-500/30",
       hoverColor: "hover:from-amber-400/50 hover:to-orange-500/50"
     },
     { 
-      name: "Up to 7 People", 
-      price: "From €150 (one way)",
+      name: t.upTo7People || "Up to 7 People", 
+      price: t.from150OneWay || "From €150 (one way)",
       capacity: "7",
       image: "/AT7.jpeg",
       gradient: "from-blue-400/30 to-purple-500/30",
@@ -841,8 +844,8 @@ function AirportTransferModal({ onClose, onSelectOption, t }) {
           
           {/* Close Button */}
           <button
-            aria-label="Close"
-            title="Close"
+            aria-label={t.close || 'Close'}
+            title={t.close || 'Close'}
             onClick={onClose}
             className="absolute top-3 right-3 w-9 h-9 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 group z-50"
           >
@@ -853,7 +856,7 @@ function AirportTransferModal({ onClose, onSelectOption, t }) {
           {/* Airport Transfer Image */}
           <div className="relative h-40 overflow-hidden">
             <img
-              src="./Fiat.jpg"
+              src="./AT2.jpeg"
               alt="Airport Transfer"
               className="w-full h-full object-cover"
             />
@@ -900,7 +903,7 @@ function AirportTransferModal({ onClose, onSelectOption, t }) {
                         <p className="text-white/90 text-sm mt-1">{option.price}</p>
                       </div>
                       <div className="flex items-center text-amber-400 font-medium text-sm">
-                        Select Option
+                        {t.selectOption || "Select Option"}
                         <svg className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                           <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
                         </svg>
@@ -1016,14 +1019,14 @@ function AirportTransferBookingModal({ option, onClose, onBack, t }) {
         if (approvalUrl) {
           window.location.href = approvalUrl;
         } else {
-          alert('Unable to redirect to PayPal. Please try again.');
+          alert(t.paypalRedirectError || 'Unable to redirect to PayPal. Please try again.');
         }
       } else {
-        alert('Failed to create order. Please try again.');
+        alert(t.orderCreateFailed || 'Failed to create order. Please try again.');
       }
     } catch (error) {
       console.error('Payment error:', error);
-      alert('Payment failed. Please try again.');
+      alert(t.paymentFailed || 'Payment failed. Please try again.');
     }
   };
 
@@ -1041,8 +1044,8 @@ function AirportTransferBookingModal({ option, onClose, onBack, t }) {
           
           {/* Close Button */}
           <button
-            aria-label="Close"
-            title="Close"
+            aria-label={t.close || 'Close'}
+            title={t.close || 'Close'}
             onClick={onClose}
             className="absolute top-3 right-3 w-9 h-9 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 group z-50"
           >
@@ -1051,8 +1054,8 @@ function AirportTransferBookingModal({ option, onClose, onBack, t }) {
 
           {/* Back Button */}
           <button
-            aria-label="Back"
-            title="Back"
+            aria-label={t.back || 'Back'}
+            title={t.back || 'Back'}
             onClick={onBack}
             className="absolute top-3 left-3 w-9 h-9 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 group z-50"
           >
@@ -1399,23 +1402,23 @@ function CarRentalDetailsModal({ car, category, onClose, onConfirm, t }) {
     const newErrors = {};
     
     if (!formData.fullName.trim()) {
-      newErrors.fullName = "Full name is required";
+      newErrors.fullName = t.fullNameRequired || "Full name is required";
     }
     
     if (!formData.age || formData.age < 18 || formData.age > 120) {
-      newErrors.age = "Age must be between 18 and 120";
+      newErrors.age = t.ageMustBeBetween || "Age must be between 18 and 120";
     }
     
     if (!formData.fromDate) {
-      newErrors.fromDate = "From date is required";
+      newErrors.fromDate = t.fromDateRequired || "From date is required";
     }
     
     if (!formData.toDate) {
-      newErrors.toDate = "To date is required";
+      newErrors.toDate = t.toDateRequired || "To date is required";
     }
     
     if (formData.fromDate && formData.toDate && formData.fromDate >= formData.toDate) {
-      newErrors.toDate = "To date must be after from date";
+      newErrors.toDate = t.toDateMustBeAfterFromDate || "To date must be after from date";
     }
     
     setErrors(newErrors);
@@ -1498,8 +1501,8 @@ function CarRentalDetailsModal({ car, category, onClose, onConfirm, t }) {
           
           {/* Close Button */}
           <button
-            aria-label="Close"
-            title="Close"
+            aria-label={t.close || 'Close'}
+            title={t.close || 'Close'}
             onClick={onClose}
             className="absolute top-3 right-3 w-9 h-9 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 group z-50"
           >
@@ -1613,15 +1616,15 @@ function CarRentalDetailsModal({ car, category, onClose, onConfirm, t }) {
                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-teal-500/20 rounded-xl" />
                   <div className="relative space-y-2">
                     <div className="flex justify-between text-white/90 text-sm">
-                      <span>Daily Rate:</span>
+                      <span>{t.dailyRate || 'Daily Rate:'}</span>
                       <span>€{dailyPrice}</span>
                     </div>
                     <div className="flex justify-between text-white/90 text-sm">
-                      <span>Rental Days:</span>
+                      <span>{t.rentalDaysLabel || 'Rental Days:'}</span>
                       <span>{rentalDays}</span>
                     </div>
                     <div className="border-t border-emerald-300/30 pt-2 mt-2 flex justify-between text-white font-bold">
-                      <span>Total Price:</span>
+                      <span>{t.totalPriceLabel || 'Total Price:'}</span>
                       <span className="text-emerald-300">€{totalPrice}</span>
                     </div>
                   </div>
@@ -1652,7 +1655,8 @@ function CarRentalDetailsModal({ car, category, onClose, onConfirm, t }) {
 }
 
 // Car Rental Booking Modal - Collect Customer Details
-function CarRentalBookingModal({ car, category, onClose, onConfirm }) {
+function CarRentalBookingModal({ car, category, onClose, onConfirm, t }) {
+  const tr = t || carServicesTranslations.en;
   const [animateIn, setAnimateIn] = useState(false);
   const [formData, setFormData] = useState({
     fullName: "",
@@ -1670,23 +1674,23 @@ function CarRentalBookingModal({ car, category, onClose, onConfirm }) {
     const newErrors = {};
     
     if (!formData.fullName.trim()) {
-      newErrors.fullName = "Full name is required";
+      newErrors.fullName = tr.fullNameRequired || "Full name is required";
     }
     
     if (!formData.age || formData.age < 18 || formData.age > 120) {
-      newErrors.age = "Age must be between 18 and 120";
+      newErrors.age = tr.ageMustBeBetween || "Age must be between 18 and 120";
     }
     
     if (!formData.fromDate) {
-      newErrors.fromDate = "From date is required";
+      newErrors.fromDate = tr.fromDateRequired || "From date is required";
     }
     
     if (!formData.toDate) {
-      newErrors.toDate = "To date is required";
+      newErrors.toDate = tr.toDateRequired || "To date is required";
     }
     
     if (formData.fromDate && formData.toDate && formData.fromDate >= formData.toDate) {
-      newErrors.toDate = "To date must be after from date";
+      newErrors.toDate = tr.toDateMustBeAfterFromDate || "To date must be after from date";
     }
     
     setErrors(newErrors);
@@ -1769,8 +1773,8 @@ function CarRentalBookingModal({ car, category, onClose, onConfirm }) {
           
           {/* Close Button */}
           <button
-            aria-label="Close"
-            title="Close"
+            aria-label={tr.close || 'Close'}
+            title={tr.close || 'Close'}
             onClick={onClose}
             className="absolute top-3 right-3 w-9 h-9 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 group z-50"
           >
@@ -1782,7 +1786,7 @@ function CarRentalBookingModal({ car, category, onClose, onConfirm }) {
             {/* Header */}
             <div className="text-center mb-6">
               <h2 className="text-2xl font-bold text-white mb-2">
-                Complete Your Booking
+                {tr.carRentalDetailsTitle || 'Complete Your Booking'}
               </h2>
               <p className="text-emerald-300 font-semibold mb-1">
                 {car.name}
@@ -1797,14 +1801,14 @@ function CarRentalBookingModal({ car, category, onClose, onConfirm }) {
               {/* Full Name */}
               <div>
                 <label className="block text-white font-semibold text-sm mb-2">
-                  Full Name *
+                  {tr.fullName || 'Full Name'} *
                 </label>
                 <input
                   type="text"
                   name="fullName"
                   value={formData.fullName}
                   onChange={handleInputChange}
-                  placeholder="Enter your full name"
+                  placeholder={tr.enterYourFullName || 'Enter your full name'}
                   className={`w-full px-4 py-2.5 bg-white/10 border ${
                     errors.fullName ? "border-red-400" : "border-white/30"
                   } rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-emerald-400 focus:bg-white/20 transition-all duration-300`}
@@ -1817,14 +1821,14 @@ function CarRentalBookingModal({ car, category, onClose, onConfirm }) {
               {/* Age */}
               <div>
                 <label className="block text-white font-semibold text-sm mb-2">
-                  Age *
+                  {tr.age || 'Age'} *
                 </label>
                 <input
                   type="number"
                   name="age"
                   value={formData.age}
                   onChange={handleInputChange}
-                  placeholder="Enter your age"
+                  placeholder={tr.enterYourAge || 'Enter your age'}
                   min="18"
                   max="120"
                   className={`w-full px-4 py-2.5 bg-white/10 border ${
@@ -1839,13 +1843,13 @@ function CarRentalBookingModal({ car, category, onClose, onConfirm }) {
               {/* From Date */}
               <div>
                 <label className="block text-white font-semibold text-sm mb-2">
-                  From Date *
+                  {tr.fromDate || 'From Date'} *
                 </label>
                 <DatePicker
                   selected={formData.fromDate}
                   onChange={(date) => handleDateChange(date, "fromDate")}
                   minDate={new Date()}
-                  placeholderText="Select from date"
+                  placeholderText={tr.selectFromDate || 'Select from date'}
                   className={`w-full px-4 py-2.5 bg-white/10 border ${
                     errors.fromDate ? "border-red-400" : "border-white/30"
                   } rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-emerald-400 focus:bg-white/20 transition-all duration-300`}
@@ -1860,13 +1864,13 @@ function CarRentalBookingModal({ car, category, onClose, onConfirm }) {
               {/* To Date */}
               <div>
                 <label className="block text-white font-semibold text-sm mb-2">
-                  To Date *
+                  {tr.toDate || 'To Date'} *
                 </label>
                 <DatePicker
                   selected={formData.toDate}
                   onChange={(date) => handleDateChange(date, "toDate")}
                   minDate={formData.fromDate || new Date()}
-                  placeholderText="Select to date"
+                  placeholderText={tr.selectToDate || 'Select to date'}
                   className={`w-full px-4 py-2.5 bg-white/10 border ${
                     errors.toDate ? "border-red-400" : "border-white/30"
                   } rounded-lg text-white placeholder-white/50 focus:outline-none focus:border-emerald-400 focus:bg-white/20 transition-all duration-300`}
@@ -1884,15 +1888,15 @@ function CarRentalBookingModal({ car, category, onClose, onConfirm }) {
                   <div className="absolute inset-0 bg-gradient-to-br from-emerald-400/20 to-teal-500/20 rounded-xl" />
                   <div className="relative space-y-2">
                     <div className="flex justify-between text-white/90 text-sm">
-                      <span>Daily Rate:</span>
+                      <span>{tr.dailyRate || 'Daily Rate:'}</span>
                       <span>€{dailyPrice}</span>
                     </div>
                     <div className="flex justify-between text-white/90 text-sm">
-                      <span>Rental Days:</span>
+                      <span>{tr.rentalDaysLabel || 'Rental Days:'}</span>
                       <span>{rentalDays}</span>
                     </div>
                     <div className="border-t border-emerald-300/30 pt-2 mt-2 flex justify-between text-white font-bold">
-                      <span>Total Price:</span>
+                      <span>{tr.totalPriceLabel || 'Total Price:'}</span>
                       <span className="text-emerald-300">€{totalPrice}</span>
                     </div>
                   </div>
@@ -1905,13 +1909,13 @@ function CarRentalBookingModal({ car, category, onClose, onConfirm }) {
                   onClick={onClose}
                   className="flex-1 px-4 py-2.5 bg-white/10 border border-white/30 text-white font-semibold rounded-lg hover:bg-white/20 hover:border-white/50 transition-all duration-300"
                 >
-                  Cancel
+                  {tr.cancel || 'Cancel'}
                 </button>
                 <button
                   onClick={handleConfirm}
                   className="flex-1 px-4 py-2.5 bg-gradient-to-r from-emerald-500 to-teal-600 text-white font-semibold rounded-lg hover:from-emerald-600 hover:to-teal-700 transition-all duration-300 hover:scale-105"
                 >
-                  Proceed to Payment
+                  {tr.proceedToPayment || 'Proceed to Payment'}
                 </button>
               </div>
             </div>
@@ -1950,8 +1954,8 @@ function CarRentalModal({ onClose, onSelectCategory, t }) {
           
           {/* Close Button */}
           <button
-            aria-label="Close"
-            title="Close"
+            aria-label={t.close || 'Close'}
+            title={t.close || 'Close'}
             onClick={onClose}
             className="absolute top-3 right-3 w-9 h-9 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 group z-50"
           >
@@ -1962,7 +1966,7 @@ function CarRentalModal({ onClose, onSelectCategory, t }) {
           {/* Car Image */}
           <div className="relative h-40 overflow-hidden">
             <img
-              src="./Fiat.jpg"
+              src="./bluelam.webp"
               alt="Car Rental"
               className="w-full h-full object-cover"
             />
@@ -2046,14 +2050,14 @@ function CarCategoryModal({ category, onClose, onBack, onSelectCar, t }) {
         name: t.alfaRomeoGiuliaOrSimilar,
         type: t.saloon,
         price: t.startingFrom150PerDay,
-        image: "./Black.jpg",
+        image: "./alpharomero.webp",
         gradient: "from-amber-400/30 to-yellow-500/30"
       },
       {
         name: t.alfaRomeoStelviolOrSimilar,
         type: t.suv,
         price: t.startingFrom150ADay,
-        image: "./Black.jpg",
+        image: "./black.jpg",
         gradient: "from-orange-500/30 to-red-500/30"
       }
     ],
@@ -2062,21 +2066,21 @@ function CarCategoryModal({ category, onClose, onBack, onSelectCar, t }) {
         name: t.fiatAbarthOrSimilar,
         type: t.small,
         price: t.startingFrom200PerDay,
-        image: "./Black.jpg",
+        image: "./abark.webp",
         gradient: "from-purple-500/30 to-pink-500/30"
       },
       {
         name: t.mercedesEOrSimilar,
         type: t.saloon,
         price: t.startingFrom250PerDay,
-        image: "./Black.jpg",
+        image: "./mercedes.webp",
         gradient: "from-indigo-500/30 to-purple-500/30"
       },
       {
         name: t.rangeRoverSportOrSimilar,
         type: t.suv,
         price: t.startingFrom250PerDay,
-        image: "./Black.jpg",
+        image: "./rr.webp",
         gradient: "from-pink-500/30 to-rose-500/30"
       }
     ],
@@ -2085,7 +2089,7 @@ function CarCategoryModal({ category, onClose, onBack, onSelectCar, t }) {
         name: t.lamborghiniFerrariEtc,
         type: t.supercars,
         price: t.startingFrom400PerDay,
-        image: "./Fiat.jpg",
+        image: "./lamborgini.webp",
         gradient: "from-red-500/30 to-rose-600/30"
       }
     ]
@@ -2107,8 +2111,8 @@ function CarCategoryModal({ category, onClose, onBack, onSelectCar, t }) {
           
           {/* Close Button */}
           <button
-            aria-label="Close"
-            title="Close"
+            aria-label={t.close || 'Close'}
+            title={t.close || 'Close'}
             onClick={onClose}
             className="absolute top-3 right-3 w-9 h-9 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 group z-50"
           >
@@ -2118,8 +2122,8 @@ function CarCategoryModal({ category, onClose, onBack, onSelectCar, t }) {
 
           {/* Back Button */}
           <button
-            aria-label="Back"
-            title="Back"
+            aria-label={t.back || 'Back'}
+            title={t.back || 'Back'}
             onClick={onBack}
             className="absolute top-3 left-3 w-9 h-9 bg-white/20 hover:bg-white/40 rounded-full flex items-center justify-center text-white shadow-lg hover:scale-110 transition-all duration-300 group z-50"
           >
@@ -2166,7 +2170,7 @@ function CarCategoryModal({ category, onClose, onBack, onSelectCar, t }) {
                   <div className="relative flex-grow text-white">
                     <h4 className="text-base font-bold mb-0.5">{car.type}</h4>
                     <p className="text-sm font-semibold mb-1">{car.name}</p>
-                    <p className="text-xs opacity-90 mb-2">Starting from {car.price}</p>
+                    <p className="text-xs opacity-90 mb-2">{car.price}</p>
                     
                     {/* PayPal Book Button */}
                     <button
@@ -2252,7 +2256,7 @@ export default function Seamless() {
       gradient: "from-yellow-400 via-amber-500 to-orange-600",
     },
     {
-      image: "./Fiat.jpg",
+      image: "./AT7.jpeg",
       title: t.privateChauffeour,
       description: t.mainDescription,
       packageType: t.privateChauffeour,
@@ -2261,7 +2265,7 @@ export default function Seamless() {
       gradient: "from-slate-400 via-gray-500 to-stone-600",
     },
     {
-      image: "./AT7.jpeg",
+      image: "./bluelam.webp",
       title: t.carRental,
       description: t.mainDescription,
       packageType: t.carRental,
@@ -2323,14 +2327,14 @@ export default function Seamless() {
         if (approvalUrl) {
           window.location.href = approvalUrl;
         } else {
-          alert('Unable to redirect to PayPal. Please try again.');
+          alert(t.paypalRedirectError || 'Unable to redirect to PayPal. Please try again.');
         }
       } else {
-        alert('Failed to create order. Please try again.');
+        alert(t.orderCreateFailed || 'Failed to create order. Please try again.');
       }
     } catch (error) {
       console.error('Payment error:', error);
-      alert('Payment failed. Please try again.');
+      alert(t.paymentFailed || 'Payment failed. Please try again.');
     }
     closeCarRentalDetailsModal();
     closeCarRentalModal();
@@ -2396,7 +2400,7 @@ export default function Seamless() {
             
 
             {/* Main Title */}
-            <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-cyan-200 via-blue-300 to-amber-400 bg-clip-text text-transparent drop-shadow-2xl">
+            <h1 className="text-5xl md:text-7xl font-bold mb-8 bg-gradient-to-r from-cyan-200 via-blue-300 to-amber-400 bg-clip-text text-transparent drop-shadow-2xl font-futura">
               {t.carServicesTitle}
             </h1>
             
@@ -2426,7 +2430,7 @@ export default function Seamless() {
         <section className=" px-8">
           <div className="max-w-7xl mx-auto">
             <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6">
+              <h2 className="text-4xl md:text-5xl font-bold text-white mb-6 font-futura">
                 {t.chooseYourRide}              
                 </h2>
               <div className="w-24 h-1 bg-gradient-to-r from-cyan-400 to-blue-500 mx-auto mb-6 rounded-full" />
@@ -2464,7 +2468,7 @@ export default function Seamless() {
          {/* Call to Action */}
                 <section className="py-20 px-8">
                   <div className="max-w-4xl mx-auto text-center">
-                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-8">
+                    <h2 className="text-4xl md:text-5xl font-bold text-white mb-8 font-futura">
                       {t.discoverRoman || "Discover Rome like a local"}
                     </h2>
                     <p className="text-xl text-white/70 mb-12 max-w-2xl mx-auto">
@@ -2484,6 +2488,7 @@ export default function Seamless() {
         {isOpen && (
           <BookingModal
             onClose={() => setIsOpen(false)}
+            t={t}
           />
         )}
 
@@ -2492,6 +2497,7 @@ export default function Seamless() {
             packageType={paymentModal.packageType}
             price={paymentModal.price}
             onClose={closePaymentModal}
+            t={t}
           />
         )}
 

@@ -200,7 +200,7 @@ export default function FullscreenMenu({ isOpen, setIsOpen }) {
     {
       label: t.aboutUsMenu,
       route: "/about",
-      subsections: [t.aboutUsMenu],
+      subsections: [t.aboutUsSubmenu],
     },
     {
       label: t.ourServicesMenu,
